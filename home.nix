@@ -17,10 +17,48 @@
   home.packages = with pkgs; [
     pkgs.brave
     pkgs.discord
-    pkgs.wofi
+    pkgs.neofetch
+
+    pkgs.obs-studio
+#    pkgs.obsidian
+    pkgs.easyeffects
 
     # Text colorizes for fish
     pkgs.grc
+
+    # Audio/Video player
+    pkgs.mpv
+
+    # Pulseaudio command line mixer
+    pkgs.pamixer    
+   
+    # library that sends desktop notifications to a notification daemon
+    pkgs.libnotify
+
+    # Hyprland pkgs/utils
+    pkgs.xdg-desktop-portal-hyprland
+    
+    # Clipboard manager
+    pkgs.cliphist
+    pkgs.wl-clipboard # required by cliphist
+    
+    # Screenshotting
+    pkgs.grim   
+    pkgs.slurp  # Area selection
+    pkgs.swappy # Annotations
+
+    # Wallpaper
+    pkgs.swww
+
+    # Application Launcher
+    pkgs.wofi
+
+    # Notification Daemon
+    pkgs.mako
+
+    # Locking
+    pkgs.wlogout
+    pkgs.swaylock-effects
   ];
 
 
@@ -132,6 +170,7 @@
 
       exec-once = swww init  # Wall paper
       exec-once = mako # Notifications 
+      exec-once = wl-paste --watch cliphist store # Clipboard
 
       input {
         kb_layout = us, ara
@@ -245,27 +284,31 @@ device:epic-mouse-v1 {
                                                                                                                                                                                                                                                                                                                                                                    $mainMod = SUPER
 
 # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, Q, exec, kitty
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, F4, killactive, # close the active window
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, M, exit, 
-                                                                                                                                                                                                                                                                                                                                                                   bind = $mainMod, E, exec, thunar # Show the graphical file browser
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, V, togglefloating, 
-                                                                                                                                                                                                                                                                                                                                                                   bind = $mainMod, R, exec, wofi --show drun
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, SPACE, exec, wofi # Show the graphical app launcher
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, P, pseudo, # dwindle
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, J, togglesplit, # dwindle
+      bind = $mainMod, Q, exec, kitty
+      bind = $mainMod, F4, killactive, # close the active window
+      bind = $mainMod, M, exit, 
+      bind = $mainMod, L, exec, swaylock # Lock the screen
+      bind = $mainMod, E, exec, thunar # Show the graphical file browser
+      bind = $mainMod, V, togglefloating, 
+      bind = $mainMod, SPACE, exec, wofi # Show the graphical app launcher
+      bind = $mainMod, P, pseudo, # dwindle
+      bind = $mainMod, J, togglesplit, # dwindle
+      bind = ALT, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy # open clipboard manager
+      bind = $mainMod, M, exec, wlogout --protocol layer-shell # show the logout window
+      bind = $mainMod, S, exec, grim -g "$(slurp)" - | swappy -f - # take a screenshot
+
 
 # Move focus with mainMod + arrow keys
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, left, movefocus, l
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, right, movefocus, r
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, up, movefocus, u
-                                                                                                                                                                                                                                                                                                                                                                     bind = $mainMod, down, movefocus, d
+                                                                                                                                                                                                                                                                                                                                                                   bind = $mainMod, left, movefocus, l
+                                                                                                                                                                                                                                                                                                                                                                   bind = $mainMod, right, movefocus, r
+                                                                                                                                                                                                                                                                                                                                                                   bind = $mainMod, up, movefocus, u
+                                                                                                                                                                                                                                                                                                                                                                   bind = $mainMod, down, movefocus, d
 
 # workspaces
 # binds $mainMod + [shift +] {1..10} to [move to] workspace {1..10}
-                                                                                                                                                                                                                                                                                                                                                                     ${builtins.concatStringsSep "\n" (builtins.genList (
-                                                                                                                                                                                                                                                                                                                                                                           x: let
-                                                                                                                                                                                                                                                                                                                                                                           ws = let
+                                                                                                                                                                                                                                                                                                                                                                   ${builtins.concatStringsSep "\n" (builtins.genList (
+                                                                                                                                                                                                                                                                                                                                                                         x: let
+                                                                                                                                                                                                                                                                                                                                                                         ws = let
                                                                                                                                                                                                                                                                                                                                                                            c = (x + 1) / 10;
                                                                                                                                                                                                                                                                                                                                                                            in
                                                                                                                                                                                                                                                                                                                                                                            builtins.toString (x + 1 - (c * 10));
