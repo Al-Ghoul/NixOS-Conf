@@ -30,7 +30,8 @@
     pkgs.mpv
 
     # Pulseaudio command line mixer
-    pkgs.pamixer    
+    pkgs.pamixer
+    pkgs.pavucontrol
    
     # library that sends desktop notifications to a notification daemon
     pkgs.libnotify
@@ -170,6 +171,7 @@
 
       exec-once = swww init  # Wall paper
       exec-once = mako # Notifications 
+      exec-once = waybar # Staus bar 
       exec-once = wl-paste --watch cliphist store # Clipboard
 
       input {
@@ -331,6 +333,169 @@ device:epic-mouse-v1 {
          bindm = $mainMod, mouse:272, movewindow
          bindm = $mainMod, mouse:273, resizewindow
          '';
+  };
+
+  programs.waybar = {
+    enable = true;
+    settings = {
+      mainBar = {
+        layer = "top";
+        position = "top";
+        height = 22;
+        output = [
+          "eDP-1"
+          "HDMI-A-1"
+        ];
+        modules-left = [ 
+        "custom/power_btn"
+        "custom/lock_screen"
+        "custom/kb_bk_light"
+        ];
+        modules-center = [ "clock" ];
+        modules-right = [
+        "cpu"
+        "network"
+        "pulseaudio" 
+        "pulseaudio#microphone"
+        "tray"
+        "temperature"
+        "hyprland/language"
+        ];
+
+        "custom/power_btn" = {
+          format = "";
+          on-click = "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown";
+          tooltip = false;
+        };
+
+        "custom/lock_screen" = {
+          format = "";
+          on-click = "sh -c '(sleep 0.5s; swaylock)' & disown";
+          tooltip = false;
+        };
+
+        "custom/kb_bk_light" = {
+          format = "";
+          # Normally this would work, but at this point it requires root permission since /sys is read-only
+          on-click = "sudo echo 1 > /sys/class/leds/input3::scrolllock/brightness";
+          tooltip = false;
+        };
+
+        cpu = {
+          interval = 2;
+          format = "";
+          max-length = 10;
+          format-alt-click = "click-right";
+          format-alt = "  {usage}%";
+        };
+
+        network = {
+          format-wifi = "  {signalStrength}%";
+          format-ethernet = "{ipaddr}/{cidr}";
+          tooltip-format = "{essid} - {ifname} via {gwaddr}";
+          format-linked = "{ifname} (No IP)";
+          format-disconnected = "Disconnected ⚠";
+          format-alt = "{ifname}:{essid} {ipaddr}/{cidr}";
+        };
+
+        tray = {
+          icon-size = 16;
+          spacing = 10;
+        };
+
+        pulseaudio = {
+          format = "{icon}";
+          format-muted = "";
+          on-click = pkgs.writeShellScript "toggle-sound" ''
+            if [ "$(pamixer --get-mute)" == "false" ]; then
+              pamixer -m
+            elif [ "$(pamixer --get-mute)" == "true" ]; then
+              pamixer -u
+            fi
+          '';
+          scroll-step = 5;
+          format-icons = {
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = ["" "" ""];
+          };
+          tooltip = true;
+          tooltip-format  = "{icon} at {volume}%";
+        };
+
+        "pulseaudio#microphone" = {
+          format = "{format_source}";
+          format-source = "";
+          format-source-muted= "";
+          on-click = pkgs.writeShellScript "toggle-mic" ''
+            if [ "$(pamixer --default-source --get-mute)" == "false" ]; then
+              pamixer --default-source -m
+            elif [ "$(pamixer --default-source --get-mute)" == "true" ]; then
+                pamixer -u --default-source u
+            fi
+          '';
+          on-scroll-down = pkgs.writeShellScript "dec-mic-vol" ''
+            pamixer --default-source -d 5 && notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "" "Mic-Level : $(pamixer --default-source --get-volume) %"
+          '';
+          on-scroll-up = pkgs.writeShellScript "inc-mic-vol" ''
+            pamixer --default-source -i 5 && notify-send -h string:x-canonical-private-synchronous:sys-notify -u low -i "" "Mic-Level : $(pamixer --default-source --get-volume) %"
+          '';
+           tooltip = true;
+           tooltip-format  = " at {volume}%";
+        };
+      };
+    };
+    style = ''
+      * {
+        border: none;
+        border-radius: 0;
+        font-family: "JetBrainsMono Nerd Font";
+        font-weight: bold;
+        font-size: 16px;
+        min-height: 0;
+      }
+
+    window#waybar {
+      background: rgba(21, 18, 27, 0);
+      color: #f6f7fc;
+    }
+
+    tooltip {
+      background: #1e1e2e;
+      opacity: 0.8;
+      border-radius: 10px;
+      border-width: 2px;
+      border-style: solid;
+      border-color: #11111b;
+    }
+
+    tooltip label {
+     color: #cdd6f4;
+    }
+
+    #custom-lock_screen,
+    #custom-power_btn,
+    #custom-kb_bk_light,
+    #window,
+    #cpu,
+    #disk,
+    #memory,
+    #clock,
+    #pulseaudio,
+    #temperature,
+    #network,
+    #tray {
+      background: rgba(21, 18, 27, 0);
+      opacity: 1;
+      padding: 0px 8px;
+      margin: 0px 3px;
+      border: 0px;
+    }
+    '';
   };
 
   gtk = {

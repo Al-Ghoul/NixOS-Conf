@@ -61,8 +61,6 @@
 
   programs.thunar.enable = true;
 
-  programs.waybar.enable = true;
-
   # Allow non-free licensed programs
   nixpkgs.config = {
     allowUnfree = true;
