@@ -53,12 +53,6 @@
 
     # Application Launcher
     pkgs.wofi
-
-    # Notification Daemon
-    #pkgs.mako
-
-    # Locking
-    pkgs.wlogout
   ];
 
 
@@ -287,7 +281,7 @@ device:epic-mouse-v1 {
 # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
       bind = $mainMod, Q, exec, kitty
       bind = $mainMod, F4, killactive, # close the active window
-      bind = $mainMod, M, exit, 
+      bind = $mainMod, ', exit, 
       bind = $mainMod, L, exec, swaylock # Lock the screen
       bind = $mainMod, E, exec, thunar # Show the graphical file browser
       bind = $mainMod, V, togglefloating, 
@@ -590,6 +584,47 @@ device:epic-mouse-v1 {
     fade-in=0.2;
     ignore-empty-password = true;
     };
+  };
+
+  programs.wlogout = {
+    enable = true;
+    layout = [
+    {
+      label = "lock";
+      action = "swaylock";
+      text = "Lock";
+    }
+
+    {
+      label = "hibernate";
+      action = "systemctl hibernate";
+      text = "Hibernate";
+    }
+
+    {
+      label = "logout";
+      action = "hyprctl dispatch exit 0";
+      text = "Logout";
+    }
+
+    {
+      label = "shutdown";
+      action = "systemctl poweroff";
+      text = "Shutdown";
+    }
+
+    {
+      label = "suspend";
+      action = "systemctl suspend";
+      text = "Suspend";
+    }
+
+    {
+      label = "reboot";
+      action = "systemctl reboot";
+      text ="Reboot";
+    }
+    ];
   };
 
  
