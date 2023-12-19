@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Al-Ghoul";
     repo = "AlGhoul-SDDM-Theme";
-    rev = "2425544d7828fae3bb14f217e8b3b2698752c150";
-    sha256 = "sha256-7ZBTayiha+zoZvvrMrX8Zc/Tr/d//6ITycAm+kpesug=";
+    rev = "daeea29";
+    sha256 = "sha256-s5MRDVmTTpzGuw2Z3nsmjaxwsg9fJb6FfCoyM/sNQL8=";
   };
 }
 
