@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ pkgs, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   name = "AlGhoul-SDDM-Theme";
   dontBuild = true;
   installPhase = ''
