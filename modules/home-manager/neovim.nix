@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
-programs.neovim = { 
-  enable = true;
-  extraLuaConfig = ''
+  programs.neovim = { 
+    enable = true;
+    extraLuaConfig = ''
     local opt = vim.opt
 
     -- Tabs / Indentation
@@ -103,94 +103,94 @@ programs.neovim = {
       end
     end
 
-  lspConfig.diagnostic_signs = { Error = " ", Warn = " ", Hint = "ﴞ ", Info = "" }
+    lspConfig.diagnostic_signs = { Error = " ", Warn = " ", Hint = "ﴞ ", Info = "" }
 
 
-  ----------------- auto cmds -------------------
-    -- auto-format on save
-    local lsp_fmt_group = vim.api.nvim_create_augroup("LspFormattingGroup", {})
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        group = lsp_fmt_group,
-        callback = function()
-        local efm = vim.lsp.get_active_clients({ name = "efm" })
+    ----------------- auto cmds -------------------
+      -- auto-format on save
+      local lsp_fmt_group = vim.api.nvim_create_augroup("LspFormattingGroup", {})
+      vim.api.nvim_create_autocmd("BufWritePre", {
+          group = lsp_fmt_group,
+          callback = function()
+          local efm = vim.lsp.get_active_clients({ name = "efm" })
 
-        if vim.tbl_isempty(efm) then
+          if vim.tbl_isempty(efm) then
           return
-        end
+          end
 
-        vim.lsp.buf.format({ name = "efm", async = true })
-        end,
-        })
-  -------------------------------------------------------------------
-    local cmp = require("cmp")
-    local luasnip = require("luasnip")
-    local lspkind = require("lspkind")
+          vim.lsp.buf.format({ name = "efm", async = true })
+          end,
+          })
+    -------------------------------------------------------------------
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+      local lspkind = require("lspkind")
 
-    require("luasnip/loaders/from_vscode").lazy_load()
-    luasnip.config.setup({})
+      require("luasnip/loaders/from_vscode").lazy_load()
+      luasnip.config.setup({})
 
-    vim.opt.completeopt = "menu,menuone,noselect"
+      vim.opt.completeopt = "menu,menuone,noselect"
 
-    cmp.setup({
-        snippet = {
-        expand = function(args)
-        luasnip.lsp_expand(args.body)
-        end,
-        },
-        mapping = cmp.mapping.preset.insert({
-            ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
-            ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
-            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-f>"] = cmp.mapping.scroll_docs(4),
-            ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-            ["<C-e>"] = cmp.mapping.abort(), -- close completion window
-            ["<CR>"] = cmp.mapping.confirm({ select = false }),
-            }),
-        -- sources for autocompletion
-        sources = cmp.config.sources({
-            { name = "nvim_lsp" }, -- lsp
-            { name = "luasnip" }, -- snippets
-            { name = "buffer" }, -- text within current buffer
-            { name = "path" }, -- file system paths
-            }),
-        -- configure lspkind for vs-code like icons
-          formatting = {
-            format = lspkind.cmp_format({
-                maxwidth = 50,
-                ellipsis_char = "...",
-                }),
+      cmp.setup({
+          snippet = {
+          expand = function(args)
+          luasnip.lsp_expand(args.body)
+          end,
           },
-    })
-  --------------------------------------------------------------------
+          mapping = cmp.mapping.preset.insert({
+              ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
+              ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
+              ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+              ["<C-f>"] = cmp.mapping.scroll_docs(4),
+              ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
+              ["<C-e>"] = cmp.mapping.abort(), -- close completion window
+              ["<CR>"] = cmp.mapping.confirm({ select = false }),
+              }),
+          -- sources for autocompletion
+          sources = cmp.config.sources({
+              { name = "nvim_lsp" }, -- lsp
+              { name = "luasnip" }, -- snippets
+              { name = "buffer" }, -- text within current buffer
+              { name = "path" }, -- file system paths
+              }),
+          -- configure lspkind for vs-code like icons
+            formatting = {
+              format = lspkind.cmp_format({
+                  maxwidth = 50,
+                  ellipsis_char = "...",
+                  }),
+            },
+      })
+    --------------------------------------------------------------------
 
-    local cmp_nvim_lsp = require("cmp_nvim_lsp")
-    local lspcon = require("lspconfig")
+      local cmp_nvim_lsp = require("cmp_nvim_lsp")
+      local lspcon = require("lspconfig")
 
-    for type, icon in pairs(lspConfig.diagnostic_signs) do
-      local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-        end
+      for type, icon in pairs(lspConfig.diagnostic_signs) do
+        local hl = "DiagnosticSign" .. type
+          vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+      end
 
-        local capabilities = cmp_nvim_lsp.default_capabilities()
-        lspcon.lua_ls.setup({
-            capabilities = capabilities,
-            on_attach = lspConfig.on_attach,
-            settings = { -- custom settings for lua
-            Lua = {
-            -- make the language server recognize "vim" global
-            diagnostics = {
-            globals = { "vim" },
-            },
-            workspace = {
-            -- make language server aware of runtime files
-            library = {
-            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-            [vim.fn.stdpath("config") .. "/lua"] = true,
-            },
-            },
-            },
-            },
-            });
+          local capabilities = cmp_nvim_lsp.default_capabilities()
+          lspcon.lua_ls.setup({
+              capabilities = capabilities,
+              on_attach = lspConfig.on_attach,
+              settings = { -- custom settings for lua
+              Lua = {
+              -- make the language server recognize "vim" global
+              diagnostics = {
+              globals = { "vim" },
+              },
+              workspace = {
+              -- make language server aware of runtime files
+              library = {
+              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+              [vim.fn.stdpath("config") .. "/lua"] = true,
+              },
+              },
+              },
+              },
+              });
 
     lspcon.rnix.setup({capabilities = capabilities, on_attach = lspConfig.on_attach})
 
@@ -218,138 +218,138 @@ programs.neovim = {
 
 
 
-  for _, v in ipairs({
-      "Normal",
-      "NormalNC",
-      "Comment",
-      "Constant",
-      "Special",
-      "Identifier",
-      "Statement",
-      "PreProc",
-      "Type",
-      "Underlined",
-      "Todo",
-      "String",
-      "Function",
-      "Conditional",
-      "Repeat",
-      "Operator",
-      "Structure",
-      "LineNr",
-      "NonText",
-      "SignColumn",
-      "CursorLineNr",
-      "EndOfBuffer",
-      "InsertEnter",
-      "CursorLine",
-      "NormalFloat",
-      "TablineFill",
-      "NvimTreeNormal",
-      "WhichKeyFloat",
-  }) do api.nvim_set_hl(0, v, {bg = "none"}) end
+    for _, v in ipairs({
+        "Normal",
+        "NormalNC",
+        "Comment",
+        "Constant",
+        "Special",
+        "Identifier",
+        "Statement",
+        "PreProc",
+        "Type",
+        "Underlined",
+        "Todo",
+        "String",
+        "Function",
+        "Conditional",
+        "Repeat",
+        "Operator",
+        "Structure",
+        "LineNr",
+        "NonText",
+        "SignColumn",
+        "CursorLineNr",
+        "EndOfBuffer",
+        "InsertEnter",
+        "CursorLine",
+        "NormalFloat",
+        "TablineFill",
+        "NvimTreeNormal",
+        "WhichKeyFloat",
+    }) do api.nvim_set_hl(0, v, {bg = "none"}) end
 
-  '';
-  plugins = 
-    with pkgs.vimPlugins; [
-    { plugin = oxocarbon-nvim;
+    '';
+    plugins = 
+      with pkgs.vimPlugins; [
+      { plugin = oxocarbon-nvim;
+        config = ''
+          lua vim.cmd.colorscheme("oxocarbon")
+          '';
+      }
+    {
+      plugin = nvim-tree-lua;
       config = ''
-        lua vim.cmd.colorscheme("oxocarbon")
+        packadd! nvim-tree.lua
+        lua require 'nvim-tree'.setup({filters = {dotfiles = false}})
         '';
     }
-  {
-    plugin = nvim-tree-lua;
-    config = ''
-      packadd! nvim-tree.lua
-      lua require 'nvim-tree'.setup({filters = {dotfiles = false}})
-      '';
-  }
-  {
-    plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline ]));
-    config = ''
-      lua require 'nvim-treesitter.configs'.setup({build = ":TSUpdate", event = { "BufReadPre", "BufNewFile", }, highlight = {enable = true, additional_vim_regex_highlighting = true}})
-      '';
-  }
-  {
-    plugin =  which-key-nvim;
-    config = ''
-      lua require 'which-key'.setup()
-      '';
-  }
-  {
-    plugin = lualine-nvim;
-    config = ''
-      lua require 'lualine'.setup({options = {theme = require('lualine.themes.iceberg_dark')}})
-      '';
-  }
-  { plugin = telescope-nvim;
+    {
+      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline ]));
+      config = ''
+        lua require 'nvim-treesitter.configs'.setup({build = ":TSUpdate", event = { "BufReadPre", "BufNewFile", }, highlight = {enable = true, additional_vim_regex_highlighting = true}})
+        '';
+    }
+    {
+      plugin =  which-key-nvim;
+      config = ''
+        lua require 'which-key'.setup()
+        '';
+    }
+    {
+      plugin = lualine-nvim;
+      config = ''
+        lua require 'lualine'.setup({options = {theme = require('lualine.themes.iceberg_dark')}})
+        '';
+    }
+    { plugin = telescope-nvim;
 
-    config = ''
-      lua require 'telescope'.setup({defaults = {mappings = {i = {["<C-j>"] = "move_selection_next",["<C-k>"] = "move_selection_previous",},},},pickers = {find_files = {theme = "dropdown",previewer = false,hidden = true,},live_grep = {theme = "dropdown",previewer = false,},find_buffers = {theme = "dropdown",previewer = false,},},})
+      config = ''
+        lua require 'telescope'.setup({defaults = {mappings = {i = {["<C-j>"] = "move_selection_next",["<C-k>"] = "move_selection_previous",},},},pickers = {find_files = {theme = "dropdown",previewer = false,hidden = true,},live_grep = {theme = "dropdown",previewer = false,},find_buffers = {theme = "dropdown",previewer = false,},},})
+        '';
+    }
+    {
+      plugin = mason-nvim;
+      config = ''
+        lua require 'mason'.setup({event = "BufReadPre", ui = {icons = {package_instlled = '✓', package_pending = '➜', package_uninstalled = '✗'}}})
+        '';
+    }
+    {
+      plugin = mason-lspconfig-nvim;
+      config = ''
+        lua require 'mason-lspconfig'.setup({event = "BufReadPre"})
+        '';
+    }
+    {
+      plugin = lspsaga-nvim;
+      config = ''
+        lua require 'lspsaga'.setup({move_in_saga = { prev = "<C-k>", next = "<C-j>" }, finder_action_keys = {open = "<CR>"}, definition_action_keys = {edit = "<CR>"}})
+        '';
+    }
+    {
+      plugin = comment-nvim;
+      config = ''
+        lua require 'Comment'.setup()
+        '';
+    }
+    nvim-lspconfig
+    cmp-buffer
+    nvim-autopairs
+    efmls-configs-nvim
+    nvim-cmp
+    luasnip
+    lspkind-nvim
+    cmp_luasnip
+    cmp-nvim-lsp
+    markdown-preview-nvim
+    vim-illuminate
+    plenary-nvim
+    vim-highlightedyank
+    nvim-web-devicons
+    presence-nvim
+    lazygit-nvim
+    zen-mode-nvim
+    { plugin = indent-blankline-nvim;
+      config = ''
+        lua require 'ibl'.setup()
+        '';
+    }
+    {
+      plugin = nvim-surround;
+      config = ''
+        lua require 'nvim-surround'.setup({});
       '';
-  }
-  {
-    plugin = mason-nvim;
-    config = ''
-      lua require 'mason'.setup({event = "BufReadPre", ui = {icons = {package_instlled = '✓', package_pending = '➜', package_uninstalled = '✗'}}})
-      '';
-  }
-  {
-    plugin = mason-lspconfig-nvim;
-    config = ''
-      lua require 'mason-lspconfig'.setup({event = "BufReadPre"})
-      '';
-  }
-  {
-    plugin = lspsaga-nvim;
-    config = ''
-      lua require 'lspsaga'.setup({move_in_saga = { prev = "<C-k>", next = "<C-j>" }, finder_action_keys = {open = "<CR>"}, definition_action_keys = {edit = "<CR>"}})
-      '';
-  }
-  {
-    plugin = comment-nvim;
-    config = ''
-      lua require 'Comment'.setup()
-      '';
-  }
-  nvim-lspconfig
-  cmp-buffer
-  nvim-autopairs
-  efmls-configs-nvim
-  nvim-cmp
-  luasnip
-  lspkind-nvim
-  cmp_luasnip
-  cmp-nvim-lsp
-  markdown-preview-nvim
-  vim-illuminate
-  plenary-nvim
-  vim-highlightedyank
-  nvim-web-devicons
-  presence-nvim
-  lazygit-nvim
-  zen-mode-nvim
-  { plugin = indent-blankline-nvim;
-    config = ''
-      lua require 'ibl'.setup()
-     '';
-  }
-  {
-    plugin = nvim-surround;
-    config = ''
-      lua require 'nvim-surround'.setup({});
-    '';
-  }
-  ];
-};
-  
-  
+    }
+    ];
+  };
+
+
   programs.ripgrep.enable = true; # Required for file searching
 
   programs.lazygit = { 
     enable = true;
     settings = { 
-    lightTheme = false;
+      lightTheme = false;
     };
   };
 
