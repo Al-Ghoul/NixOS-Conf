@@ -81,31 +81,29 @@ programs.neovim = {
     local api = vim.api
 
     -- Zen Mode
-
-    keymap.set('n', "<leader>zm", ":ZenMode<CR>", default_opts) -- Opens LazyGit
-
+    keymap.set('n', "<leader>zm", ":ZenMode<CR>", default_opts) -- Opens ZenMode
 
     local lspConfig = {};
     lspConfig.on_attach = function(client, bufnr)
-    local opts = { noremap = true, silent = true, buffer = bufnr }
+      local opts = { noremap = true, silent = true, buffer = bufnr }
 
-    keymap.set('n', "<leader>fd", ":Lspsaga finder<CR>", opts) -- go to definition
-    keymap.set('n', "<leader>gd", ":Lspsaga peek_definition<CR>", opts) -- peek definition
-    keymap.set('n', "<leader>gD", ":Lspsaga goto_definition<CR>", opts) -- go to definition
-    keymap.set('n', "<leader>ca", ":Lspsaga code_action<CR>", opts) -- see available code actions
-    keymap.set('n', "<leader>rn", ":Lspsaga rename<CR>", opts) -- smart rename
-    keymap.set('n', "<leader>D", ":Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
-    keymap.set('n', "<leader>d", ":Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
-    keymap.set('n', "<leader>pd", ":Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to prev diagnostic in buffer
-    keymap.set('n', "<leader>nd", ":Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
-    keymap.set('n', "K", ":Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
+      keymap.set('n', "<leader>fd", ":Lspsaga finder<CR>", opts) -- go to definition
+      keymap.set('n', "<leader>gd", ":Lspsaga peek_definition<CR>", opts) -- peek definition
+      keymap.set('n', "<leader>gD", ":Lspsaga goto_definition<CR>", opts) -- go to definition
+      keymap.set('n', "<leader>ca", ":Lspsaga code_action<CR>", opts) -- see available code actions
+      keymap.set('n', "<leader>rn", ":Lspsaga rename<CR>", opts) -- smart rename
+      keymap.set('n', "<leader>D", ":Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
+      keymap.set('n', "<leader>d", ":Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
+      keymap.set('n', "<leader>pd", ":Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to prev diagnostic in buffer
+      keymap.set('n', "<leader>nd", ":Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
+      keymap.set('n', "K", ":Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
 
-    if client.name == "pyright" then
-      mapkey("<Leader>oi", "PyrightOrganizeImports", "n", opts)
+      if client.name == "pyright" then
+        keymap.set('n', "<Leader>oi", ":PyrightOrganizeImports<CR>",  opts)
+      end
     end
-    end
 
-    lspConfig.diagnostic_signs = { Error = " ", Warn = " ", Hint = "ﴞ ", Info = "" }
+  lspConfig.diagnostic_signs = { Error = " ", Warn = " ", Hint = "ﴞ ", Info = "" }
 
 
   ----------------- auto cmds -------------------
@@ -117,7 +115,7 @@ programs.neovim = {
         local efm = vim.lsp.get_active_clients({ name = "efm" })
 
         if vim.tbl_isempty(efm) then
-        return
+          return
         end
 
         vim.lsp.buf.format({ name = "efm", async = true })
@@ -194,7 +192,7 @@ programs.neovim = {
             },
             });
 
-  lspcon.rnix.setup({capabilities = capabilities, on_attach = lspConfig.on_attach})
+    lspcon.rnix.setup({capabilities = capabilities, on_attach = lspConfig.on_attach})
 
     local stylua = require("efmls-configs.formatters.stylua")
     local luacheck = require("efmls-configs.linters.luacheck")
@@ -302,14 +300,12 @@ programs.neovim = {
       lua require 'mason-lspconfig'.setup({event = "BufReadPre"})
       '';
   }
-
   {
     plugin = lspsaga-nvim;
     config = ''
       lua require 'lspsaga'.setup({move_in_saga = { prev = "<C-k>", next = "<C-j>" }, finder_action_keys = {open = "<CR>"}, definition_action_keys = {edit = "<CR>"}})
       '';
   }
-
   {
     plugin = comment-nvim;
     config = ''
@@ -317,28 +313,27 @@ programs.neovim = {
       '';
   }
   nvim-lspconfig
-    cmp-buffer
-    nvim-autopairs
-    efmls-configs-nvim
-    nvim-cmp
-    luasnip
-    lspkind-nvim
-    cmp_luasnip
-    cmp-nvim-lsp
-    markdown-preview-nvim
-    vim-illuminate
-    plenary-nvim
-    vim-highlightedyank
-    nvim-web-devicons
-    presence-nvim
-    lazygit-nvim
-    zen-mode-nvim
-
-    { plugin = indent-blankline-nvim;
-      config = ''
-        lua require 'ibl'.setup()
-        '';
-    }
+  cmp-buffer
+  nvim-autopairs
+  efmls-configs-nvim
+  nvim-cmp
+  luasnip
+  lspkind-nvim
+  cmp_luasnip
+  cmp-nvim-lsp
+  markdown-preview-nvim
+  vim-illuminate
+  plenary-nvim
+  vim-highlightedyank
+  nvim-web-devicons
+  presence-nvim
+  lazygit-nvim
+  zen-mode-nvim
+  { plugin = indent-blankline-nvim;
+    config = ''
+      lua require 'ibl'.setup()
+     '';
+  }
   {
     plugin = nvim-surround;
     config = ''
@@ -347,8 +342,10 @@ programs.neovim = {
   }
   ];
 };
+  
+  
+  programs.ripgrep.enable = true; # Required for file searching
 
-  programs.ripgrep.enable = true;
   programs.lazygit = { 
     enable = true;
     settings = { 

@@ -82,10 +82,10 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-      wget
-      git
-      pkgs.libsForQt5.qt5.qtgraphicaleffects
-      (callPackage ./modules/nix-os/alghoul-sddm-theme.nix {})
+    wget
+    git
+    pkgs.libsForQt5.qt5.qtgraphicaleffects
+    (callPackage ./modules/nix-os/alghoul-sddm-theme.nix {})
   ];
 
   # Open ports in the firewall.

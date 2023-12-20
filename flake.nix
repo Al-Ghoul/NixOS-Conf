@@ -9,11 +9,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, ... }: {
     nixosConfigurations = {
       AlGhoul = nixpkgs.lib.nixosSystem { 
         system = "x86_64-linux";
-        specialArgs = inputs;
 
         modules = [
           ./configuration.nix
