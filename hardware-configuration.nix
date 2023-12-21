@@ -23,7 +23,7 @@
       fsType = "vfat";
     };
 
-  fileSystems."/mnt/HardDriverOne" =
+  fileSystems."/mnt/HardDriveOne" =
     { device = "/dev/disk/by-uuid/01D7BE88A6C1AFE0";
       fsType = "ntfs3";
     };
