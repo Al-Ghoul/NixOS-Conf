@@ -18,6 +18,17 @@
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
+  hardware = {
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true; 
+      extraPackages = [ pkgs.amdvlk pkgs.mesa ];
+      extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
+    };
+  };
+
+
   # Fix swaylock's login failure with correct password
   security.pam.services.swaylock = {};
 
@@ -31,7 +42,7 @@
   # Enable the X11 windowing system.
   services.xserver = { 
     enable = true;
-    videoDrivers = [ "amdgpu" ];
+    videoDrivers = [ "modesetting" ];
     displayManager = {
       sddm = {
         enable = true;
