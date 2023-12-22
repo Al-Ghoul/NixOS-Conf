@@ -265,7 +265,7 @@
         '';
     }
     {
-      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline ]));
+      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline p.nix ]));
       config = ''
         lua require 'nvim-treesitter.configs'.setup({build = ":TSUpdate", event = { "BufReadPre", "BufNewFile", }, highlight = {enable = true, additional_vim_regex_highlighting = true}})
         '';
