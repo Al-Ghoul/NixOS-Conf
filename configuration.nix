@@ -98,7 +98,18 @@
     pkgs.libsForQt5.qt5.qtgraphicaleffects
     (callPackage ./modules/nix-os/alghoul-sddm-theme.nix {})
   ];
-
+  
+  services.hydra = {
+    enable = true;
+    port = 3333;
+    hydraURL = "http://localhost:3333";
+    notificationSender = "hydra@localhost";
+    buildMachinesFiles = [];
+    useSubstitutes = true;
+    minimumDiskFree = 20;
+    minimumDiskFreeEvaluator = 20;
+  };
+  
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
