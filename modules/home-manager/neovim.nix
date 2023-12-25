@@ -249,28 +249,11 @@
             cpp = { cpplint, clang_format },
             },
           },
-        })
-
-
+    })
 
     for _, v in ipairs({
         "Normal",
         "NormalNC",
---        "Comment",
---        "Constant",
---        "Special",
---        "Identifier",
---        "Statement",
---        "PreProc",
---        "Type",
---        "Underlined",
---        "Todo",
---        "String",
---        "Function",
---        "Conditional",
---        "Repeat",
---        "Operator",
---        "Structure",
         "LineNr",
         "NonText",
         "SignColumn",
@@ -283,21 +266,19 @@
         "NvimTreeNormal",
         "WhichKeyFloat",
     }) do api.nvim_set_hl(0, v, {bg = "none"}) end
-
     '';
     plugins = 
       with pkgs.vimPlugins; [
       { plugin = oxocarbon-nvim;
         config = ''
           lua vim.cmd.colorscheme("oxocarbon")
-          '';
+        '';
       }
     {
       plugin = nvim-tree-lua;
       config = ''
-        packadd! nvim-tree.lua
         lua require 'nvim-tree'.setup({filters = {dotfiles = false}})
-        '';
+      '';
     }
     {
       plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline p.nix p.typescript p.tsx ]));
@@ -306,43 +287,43 @@
       plugin =  which-key-nvim;
       config = ''
         lua require 'which-key'.setup()
-        '';
+      '';
     }
     {
       plugin = lualine-nvim;
       config = ''
         lua require 'lualine'.setup({options = {theme = require('lualine.themes.iceberg_dark')}})
-        '';
+      '';
     }
-    { plugin = telescope-nvim;
-
+    {
+      plugin = telescope-nvim;
       config = ''
         lua require 'telescope'.setup({defaults = {mappings = {i = {["<C-j>"] = "move_selection_next",["<C-k>"] = "move_selection_previous",},},},pickers = {find_files = {theme = "dropdown",previewer = false,hidden = true,},live_grep = {theme = "dropdown",previewer = false,},find_buffers = {theme = "dropdown",previewer = false,},},})
-        '';
+      '';
     }
     {
       plugin = mason-nvim;
       config = ''
         lua require 'mason'.setup({event = "BufReadPre", ui = {icons = {package_instlled = '✓', package_pending = '➜', package_uninstalled = '✗'}}})
-        '';
+      '';
     }
     {
       plugin = mason-lspconfig-nvim;
       config = ''
-        lua require 'mason-lspconfig'.setup({event = "BufReadPre"})
-        '';
+        lua require 'mason-lspconfig'.setup({event = "BufReadPre"}, ensure_installed = { "codelldb", "cpplint", "efm", "emmet_ls", "html", "eslint_d", "lua_ls", "prettier_d", "rnix", "stylua", "tsserver" }, 	automatic_installation = true)
+      '';
     }
     {
       plugin = lspsaga-nvim;
       config = ''
         lua require 'lspsaga'.setup({move_in_saga = { prev = "<C-k>", next = "<C-j>" }, finder_action_keys = {open = "<CR>"}, definition_action_keys = {edit = "<CR>"}})
-        '';
+      '';
     }
     {
       plugin = comment-nvim;
       config = ''
         lua require 'Comment'.setup()
-        '';
+      '';
     }
     nvim-lspconfig
     cmp-buffer
@@ -361,7 +342,8 @@
     presence-nvim
     lazygit-nvim
     zen-mode-nvim
-    { plugin = indent-blankline-nvim;
+    { 
+      plugin = indent-blankline-nvim;
       config = ''
         lua require 'ibl'.setup()
         '';
