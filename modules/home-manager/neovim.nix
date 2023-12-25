@@ -171,49 +171,84 @@
           vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
 
-          local capabilities = cmp_nvim_lsp.default_capabilities()
-          lspcon.lua_ls.setup({
-              capabilities = capabilities,
-              on_attach = lspConfig.on_attach,
-              settings = { -- custom settings for lua
-              Lua = {
-              -- make the language server recognize "vim" global
-              diagnostics = {
-              globals = { "vim" },
-              },
-              workspace = {
-              -- make language server aware of runtime files
-              library = {
+    local capabilities = cmp_nvim_lsp.default_capabilities()
+    lspcon.lua_ls.setup({
+        capabilities = capabilities,
+        on_attach = lspConfig.on_attach,
+        settings = { -- custom settings for lua
+          Lua = {
+            -- make the language server recognize "vim" global
+            diagnostics = {
+            globals = { "vim" },
+          },
+          workspace = {
+            -- make language server aware of runtime files
+            library = {
               [vim.fn.expand("$VIMRUNTIME/lua")] = true,
               [vim.fn.stdpath("config") .. "/lua"] = true,
-              },
-              },
-              },
-              },
-              });
+            },
+          },
+        },
+      },
+    });
 
-    lspcon.rnix.setup({capabilities = capabilities, on_attach = lspConfig.on_attach})
+   	lspcon.clangd.setup({
+      capabilities = capabilities,
+      on_attach = lspConfig.on_attach,
+   })
 
+
+    lspcon.rnix.setup({
+      capabilities = capabilities,
+      on_attach = lspConfig.on_attach,
+    })
+
+    lspcon.tsserver.setup({
+      capabilities = capabilities,
+      on_attach = lspConfig.on_attach,
+    })
+
+    lspcon.emmet_ls.setup({
+      capabilities = capabilities,
+      on_attach = lspConfig.on_attach,
+    })
+  
     local stylua = require("efmls-configs.formatters.stylua")
     local luacheck = require("efmls-configs.linters.luacheck")
+    local eslint_d = require("efmls-configs.linters.eslint_d")
+    local prettierd = require("efmls-configs.formatters.prettier_d")
+    local clang_format = require("efmls-configs.formatters.clang_format")
+    local cpplint  = require("efmls-configs.linters.cpplint")
 
     lspcon.efm.setup({
         filetypes = {
-        "lua",
+          "lua",
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "markdown",
+          "cpp",
         },
         init_options = {
-        documentFormatting = true,
-        documentRangeFormatting = true,
-        hover = true,
-        documentSymbol = true,
-        codeAction = true,
-        completion = true,
+          documentFormatting = true,
+          documentRangeFormatting = true,
+          hover = true,
+          documentSymbol = true,
+          codeAction = true,
+          completion = true,
         },
         settings = {
-        languages = {
-        lua = { luacheck, stylua },
-        },
-        },
+          languages = {
+            lua = { luacheck, stylua },
+            typescript = { eslint_d, prettierd },
+            javascript = { eslint_d, prettierd },
+            javascriptreact = { eslint_d, prettierd },
+            typescriptreact = { eslint_d, prettierd },
+            markdown = { prettierd },
+            cpp = { cpplint, clang_format },
+            },
+          },
         })
 
 
@@ -221,21 +256,21 @@
     for _, v in ipairs({
         "Normal",
         "NormalNC",
-        "Comment",
-        "Constant",
-        "Special",
-        "Identifier",
-        "Statement",
-        "PreProc",
-        "Type",
-        "Underlined",
-        "Todo",
-        "String",
-        "Function",
-        "Conditional",
-        "Repeat",
-        "Operator",
-        "Structure",
+--        "Comment",
+--        "Constant",
+--        "Special",
+--        "Identifier",
+--        "Statement",
+--        "PreProc",
+--        "Type",
+--        "Underlined",
+--        "Todo",
+--        "String",
+--        "Function",
+--        "Conditional",
+--        "Repeat",
+--        "Operator",
+--        "Structure",
         "LineNr",
         "NonText",
         "SignColumn",
@@ -265,10 +300,7 @@
         '';
     }
     {
-      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline p.nix ]));
-      config = ''
-        lua require 'nvim-treesitter.configs'.setup({build = ":TSUpdate", event = { "BufReadPre", "BufNewFile", }, highlight = {enable = true, additional_vim_regex_highlighting = true}})
-        '';
+      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline p.nix p.typescript p.tsx ]));
     }
     {
       plugin =  which-key-nvim;
