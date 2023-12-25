@@ -11,8 +11,6 @@
     ./modules/home-manager/gtk.nix
   ];
   
-  services.easyeffects.enable = true;
-
   home.username = "alghoul";
   home.homeDirectory = "/home/alghoul";
 
