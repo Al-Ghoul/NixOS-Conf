@@ -7,7 +7,6 @@
 
     pkgs.obs-studio
 #    pkgs.obsidian # Insecure ?
-    pkgs.easyeffects
 
     # Text colorizes for fish
     pkgs.grc
