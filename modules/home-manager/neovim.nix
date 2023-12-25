@@ -110,18 +110,16 @@
       -- auto-format on save
       local lsp_fmt_group = vim.api.nvim_create_augroup("LspFormattingGroup", {})
       vim.api.nvim_create_autocmd("BufWritePre", {
-          group = lsp_fmt_group,
-          callback = function()
-          local efm = vim.lsp.get_active_clients({ name = "efm" })
-
-          if vim.tbl_isempty(efm) then
-          return
-          end
-
-          vim.lsp.buf.format({ name = "efm", async = true })
-          end,
-          })
-    -------------------------------------------------------------------
+	group = lsp_fmt_group,
+	callback = function()
+		local efm = vim.lsp.get_active_clients({ name = "efm" })
+		if vim.tbl_isempty(efm) then
+			return
+		end
+		vim.lsp.buf.format({ name = "efm", async = true })
+	end,
+	})
+------------------------------------------------------
       local cmp = require("cmp")
       local luasnip = require("luasnip")
       local lspkind = require("lspkind")
@@ -310,7 +308,7 @@
     {
       plugin = mason-lspconfig-nvim;
       config = ''
-        lua require 'mason-lspconfig'.setup({event = "BufReadPre"}, ensure_installed = { "codelldb", "cpplint", "efm", "emmet_ls", "html", "eslint_d", "lua_ls", "prettier_d", "rnix", "stylua", "tsserver" }, 	automatic_installation = true)
+        lua require 'mason-lspconfig'.setup({event = "BufReadPre", ensure_installed = { "efm", "emmet_ls", "lua_ls", "rnix", "tsserver" }})
       '';
     }
     {
