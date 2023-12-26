@@ -51,7 +51,7 @@
         blur {
           enabled = true
             size = 5
-            passes = 1
+            passes = 3
             new_optimizations = true
         }
 
