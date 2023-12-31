@@ -17,7 +17,7 @@
     opt.incsearch = true
     opt.ignorecase = true
     opt.smartcase = true
-    opt.hlsearch = false
+    opt.hlsearch = true
 
     -- Appearance
     opt.number = true
@@ -82,6 +82,9 @@
 
     -- Zen Mode
     keymap.set('n', "<leader>zm", ":ZenMode<CR>", default_opts) -- Opens ZenMode
+    
+    keymap.set('n', "<esc>", ":noh<CR>", default_opts) -- Turns off search highlighting
+    
 
     local lspConfig = {};
     lspConfig.on_attach = function(client, bufnr)

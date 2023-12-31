@@ -1,12 +1,12 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [
+  home.packages = [
     pkgs.brave
     pkgs.discord
     pkgs.neofetch
 
     pkgs.obs-studio
-#    pkgs.obsidian # Insecure ?
+    #pkgs.obsidian # Insecure ?
 
     # Text colorizes for fish
     pkgs.grc
