@@ -126,8 +126,13 @@
     useSubstitutes = true;
     minimumDiskFree = 20;
     minimumDiskFreeEvaluator = 20;
+    extraConfig = ''
+      <git-input>
+        timeout = 3600
+      </git-input>
+    '';
   };
-  
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
