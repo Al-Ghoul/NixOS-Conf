@@ -11,8 +11,14 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
 
-  # Enable Flakes and the new command-line tool
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    # Enable Flakes and the new command-line tool
+    experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = [ 
+      "root"
+      "alghoul"
+    ];
+  };
 
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
@@ -133,6 +139,24 @@
     '';
   };
 
+  services.postgresql = {
+    ensureUsers = [
+      {
+        name = "alghoul";
+        ensureClauses = {
+          login = true;
+          superuser = true;
+          bypassrls = true;
+          createdb = true;
+          replication = true;
+          createrole = true;
+        };
+      }
+    ];
+    authentication = ''
+      local   all             alghoul peer
+    '';
+  };
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
