@@ -195,11 +195,26 @@
       },
     });
 
+    lspcon.pyright.setup({
+        capabilities = capabilities,
+        on_attach = lspConfig.on_attach,
+        settings = {
+        pyright = {
+          disableOrganizeImports = false,
+          analysis = {
+          useLibraryCodeForTypes = true,
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          autoImportCompletions = true,
+        },
+      },
+    },
+	})
+
    	lspcon.clangd.setup({
       capabilities = capabilities,
       on_attach = lspConfig.on_attach,
    })
-
 
     lspcon.rnix.setup({
       capabilities = capabilities,
@@ -215,13 +230,34 @@
       capabilities = capabilities,
       on_attach = lspConfig.on_attach,
     })
-  
+
+    lspcon.intelephense.setup({
+      capabilities = capabilities,
+      on_attach = lspConfig.on_attach
+    })
+
+    -- formatter/linters & more 
+    -- https://github.com/creativenull/efmls-configs-nvim/blob/main/doc/SUPPORTED_LIST.md
+ 
+    -- lua (astonishing ikr :D)
     local stylua = require("efmls-configs.formatters.stylua")
     local luacheck = require("efmls-configs.linters.luacheck")
+    
+    -- general
     local eslint_d = require("efmls-configs.linters.eslint_d")
     local prettierd = require("efmls-configs.formatters.prettier_d")
+
+    -- c/cpp/rust
     local clang_format = require("efmls-configs.formatters.clang_format")
     local cpplint  = require("efmls-configs.linters.cpplint")
+
+    -- python
+    local flake8 = require("efmls-configs.linters.flake8")
+    local black = require("efmls-configs.formatters.black")
+    
+    -- php
+    local phpLinter = require('efmls-configs.linters.php')
+    local phpFomatter = require('efmls-configs.formatters.pint')
 
     lspcon.efm.setup({
         filetypes = {
@@ -232,6 +268,8 @@
           "typescriptreact",
           "markdown",
           "cpp",
+          "python",
+          "php"
         },
         init_options = {
           documentFormatting = true,
@@ -250,8 +288,10 @@
             typescriptreact = { eslint_d, prettierd },
             markdown = { prettierd },
             cpp = { cpplint, clang_format },
-            },
+            python = { flake8, black },
+            php = { phpLinter, phpFomatter },
           },
+        },
     })
 
     for _, v in ipairs({
@@ -284,7 +324,7 @@
       '';
     }
     {
-      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline p.nix p.typescript p.tsx ]));
+      plugin = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.lua p.markdown p.markdown_inline p.nix p.typescript p.tsx p.python p.php ]));
     }
     {
       plugin =  which-key-nvim;
@@ -313,7 +353,7 @@
     {
       plugin = mason-lspconfig-nvim;
       config = ''
-        lua require 'mason-lspconfig'.setup({event = "BufReadPre", ensure_installed = { "efm", "emmet_ls", "lua_ls", "rnix", "tsserver" }})
+        lua require 'mason-lspconfig'.setup({event = "BufReadPre", ensure_installed = { "efm", "emmet_ls", "lua_ls", "rnix", "tsserver", "pyright", "intelephense" }})
       '';
     }
     {
