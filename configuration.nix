@@ -18,6 +18,7 @@
       "root"
       "alghoul"
     ];
+    sandbox = "relaxed";
   };
 
   fonts.packages = with pkgs; [
@@ -92,7 +93,7 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.alghoul.isNormalUser = true;
-  users.users.alghoul.extraGroups = [ "wheel" ];
+  users.users.alghoul.extraGroups = [ "wheel" "libvirtd" "docker" ];
 
 
   # List packages installed in system profile. To search, run:
@@ -157,6 +158,13 @@
       local   all             alghoul peer
     '';
   };
+
+  virtualisation = {
+    docker.enable = true;
+    libvirtd.enable = true;
+  };
+  networking.firewall.checkReversePath = false;
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
