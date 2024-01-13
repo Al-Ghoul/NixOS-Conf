@@ -241,6 +241,11 @@
             on_attach = lspConfig.on_attach
           }) 
 
+          lspcon.tailwindcss.setup({
+            capabilities = capabilities,
+            on_attach = lspConfig.on_attach
+          }) 
+
           -- formatter/linters & more 
           -- https://github.com/creativenull/efmls-configs-nvim/blob/main/doc/SUPPORTED_LIST.md
  
@@ -267,11 +272,6 @@
           lspcon.efm.setup({
               filetypes = {
                 "lua",
-                "javascript",
-                "javascriptreact",
-                "typescript",
-                "typescriptreact",
-                "markdown",
                 "cpp",
                 "python",
                 "php"

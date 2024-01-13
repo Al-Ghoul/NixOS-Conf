@@ -46,6 +46,9 @@
         inherit inputs pkgs;
         modules = [
           ({ ... }: {
+            packages = with pkgs; [
+              nodejs
+            ];
             pre-commit.hooks = {
               deadnix.enable = true;
               nixpkgs-fmt.enable = true;
