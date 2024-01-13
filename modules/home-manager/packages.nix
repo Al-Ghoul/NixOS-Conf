@@ -42,6 +42,8 @@
 
     nixops_unstable
     virt-manager-qt
+
+    lazydocker
   ];
 
 }
