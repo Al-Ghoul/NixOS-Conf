@@ -1,41 +1,47 @@
 { pkgs, ... }:
 {
-  home.packages = [
-    pkgs.brave
-    pkgs.discord
-    pkgs.neofetch
+  home.packages = with pkgs; [
+    brave
+    discord
+    neofetch
 
-    pkgs.obs-studio
-    #pkgs.obsidian # Insecure ?
+    obs-studio
+    #obsidian # Insecure ?
 
     # Text colorizes for fish
-    pkgs.grc
+    grc
 
     # Audio/Video player
-    pkgs.mpv
+    mpv
 
     # Pulseaudio command line mixer
-    pkgs.pamixer
-    pkgs.pavucontrol
-   
-    # library that sends desktop notifications to a notification daemon
-    pkgs.libnotify
+    pamixer
+    pavucontrol
 
-    # Hyprland pkgs/utils
-    pkgs.xdg-desktop-portal-hyprland
-    
+    # library that sends desktop notifications to a notification daemon
+    libnotify
+
+    # Hyprland utils
+    xdg-desktop-portal-hyprland
+
     # Clipboard manager
-    pkgs.cliphist
-    pkgs.wl-clipboard # required by cliphist
-    
+    cliphist
+    wl-clipboard # required by cliphist
+
     # Screenshotting
-    pkgs.grim   
-    pkgs.slurp  # Area selection
-    pkgs.swappy # Annotations
+    grim
+    slurp # Area selection
+    swappy # Annotations
 
     # Wallpaper
-    pkgs.swww
-    pkgs.lxappearance-gtk2
+    swww
+    lxappearance-gtk2
+
+    # Entire screen sharing
+    xwaylandvideobridge
+
+    nixops_unstable
+    virt-manager-qt
   ];
 
 }
