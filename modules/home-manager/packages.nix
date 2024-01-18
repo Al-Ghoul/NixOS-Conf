@@ -42,9 +42,7 @@
 
     virt-manager-qt
 
-    lazygit
     lazydocker
-    ripgrep
   ];
 
 }

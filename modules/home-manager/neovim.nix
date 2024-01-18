@@ -442,4 +442,11 @@
 
     extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim ];
   };
-}
+
+  programs.ripgrep.enable = true;
+  programs.lazygit = {
+    enable = true;
+    settings = {
+      lightTheme = false;
+    };
+  }
