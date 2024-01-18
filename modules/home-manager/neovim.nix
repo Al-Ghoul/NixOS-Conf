@@ -5,7 +5,7 @@
       enable = true;
 
       extraConfigLua = ''
-                  local api = vim.api
+        local api = vim.api
 
         for _, v in ipairs({
                  "Normal",
@@ -40,7 +40,7 @@
 
         {
           action = "<C-w>h";
-          key = "<leader>h";
+          key = "<C-h>";
           mode = "n";
           options = {
             noremap = true;
@@ -50,7 +50,7 @@
         }
         {
           action = "<C-w>j";
-          key = "<leader>j";
+          key = "<C-j>";
           mode = "n";
           options = {
             silent = true;
@@ -59,7 +59,7 @@
         }
         {
           action = "<C-w>k";
-          key = "<leader>l";
+          key = "<C-k>";
           mode = "n";
           options = {
             silent = true;
@@ -68,7 +68,7 @@
         }
         {
           action = "<C-w>l";
-          key = "<leader>l";
+          key = "<C-l>";
           mode = "n";
           options = {
             silent = true;
@@ -295,7 +295,7 @@
         signcolumn = "yes";
         cmdheight = 1;
         scrolloff = 10;
-        completeopt = "menuone,noinsert,noselect";
+        completeopt = "menu,menuone,noselect";
 
         # Behavior
         hidden = true;
@@ -324,17 +324,6 @@
           enable = true;
           disableNetrw = true;
           openOnSetup = true;
-        };
-        barbar = {
-          enable = true;
-          keymaps = {
-            close = "q";
-            next = "]";
-            previous = "[";
-            moveNext = "}";
-            movePrevious = "{";
-            pick = "p";
-          };
         };
         airline = {
           enable = true;
@@ -395,14 +384,6 @@
           modes = [ "/" "?" ":" ];
         };
 
-        coq-nvim = {
-          enable = true;
-          alwaysComplete = true;
-          autoStart = true;
-          installArtifacts = true;
-          recommendedKeymaps = false;
-        };
-
         presence-nvim = {
           enable = true;
           enableLineNumber = true;
@@ -421,29 +402,48 @@
           };
         };
 
-        lsp-format.enable = true;
-        lsp-lines.enable = true;
-        none-ls = {
-          debounce = 250;
-          logLevel = "off";
+
+        luasnip = {
           enable = true;
-          enableLspFormat = true;
-          sources = {
-            diagnostics = {
-              deadnix.enable = true;
-              eslint_d.enable = true;
-              statix.enable = true;
+          fromVscode = [{ }];
+        };
+        nvim-cmp = {
+          enable = true;
+          sources =
+            [
+              { name = "nvim_lsp"; }
+              { name = "luasnip"; }
+              { name = "path"; }
+              { name = "buffer"; }
+            ];
+
+          mapping = {
+            "<C-Space>" = "cmp.mapping.complete()";
+            "<C-d>" = "cmp.mapping.scroll_docs(-4)";
+            "<C-e>" = "cmp.mapping.close()";
+            "<C-f>" = "cmp.mapping.scroll_docs(4)";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<S-Tab>" = {
+              action = "cmp.mapping.select_prev_item()";
+              modes = [
+                "i"
+                "s"
+              ];
             };
-            formatting = {
-              eslint_d.enable = true;
-              nixfmt.enable = true;
-              nixpkgs_fmt.enable = true;
+            "<Tab>" = {
+              action = "cmp.mapping.select_next_item()";
+              modes = [
+                "i"
+                "s"
+              ];
             };
           };
         };
+        lsp-format.enable = true;
+        lsp-lines.enable = true;
       };
 
-      extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim ];
+      extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim friendly-snippets ];
     };
 
     ripgrep.enable = true;
