@@ -394,7 +394,7 @@
       };
 
       coq-nvim = {
-        enable = false;
+        enable = true;
         alwaysComplete = true;
         autoStart = true;
         installArtifacts = true;
