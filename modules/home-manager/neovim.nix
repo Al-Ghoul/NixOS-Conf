@@ -417,6 +417,7 @@
           servers = {
             nixd.enable = true;
             tsserver.enable = true;
+            tailwindcss.enable = true;
           };
         };
 
