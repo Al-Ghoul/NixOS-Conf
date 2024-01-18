@@ -1,29 +1,27 @@
-{ lib, ... }:
-{
+{ lib, ... }: {
   programs.starship = {
     enable = true;
     enableFishIntegration = true;
     settings = {
       format = lib.concatStrings [
-        "[░▒▓](#352727)"
-        "[ ](bg:#836363 fg:#4e0404)"
-        "[](bg:#836363 fg:#836363)"
+        "[░▒▓](#273533)"
+        "[ ](bg:#637783 fg:#04364E)"
+        "[](bg:#637783 fg:#637783)"
         "$directory"
-        "[](fg:#836363 bg:#493737)"
+        "[](fg:#637783 bg:#374349)"
         "$git_branch"
         "$git_status"
-        "[](fg:#493737 bg:#3a2c2c)"
-        "[](fg:#3a2c2c bg:#2c2121)"
-        "[ ](fg:#2c2121)"
-        "\n$character"
+        "[](fg:#374349 bg:#2C333A)"
+        "[](fg:#2C333A bg:#21282C)"
+        "[ ](fg:#21282C)"
+        ''
+
+          $character''
       ];
 
       directory = {
-        style = "fg:#e3e5e5 bg:#836363";
-        format = lib.concatStrings [
-          "[ $path ]"
-          "($style)"
-        ];
+        style = "fg:#e3e5e5 bg:#637783";
+        format = lib.concatStrings [ "[ $path ]" "($style)" ];
         truncation_length = 3;
         truncation_symbol = "…/";
       };
@@ -39,7 +37,7 @@
         symbol = "";
         style = "bg:#394260";
         format = lib.concatStrings [
-          "[[ $symbol $branch ](fg:#000000 bg:#493737)]"
+          "[[ $symbol $branch ](fg:#000000 bg:#374349)]"
           "($style)"
         ];
       };
@@ -47,7 +45,7 @@
       git_status = {
         style = "bg:#394260";
         format = lib.concatStrings [
-          "[[($all_status$ahead_behind )](fg:#FFFFFF bg:#493737)]"
+          "[[($all_status$ahead_behind )](fg:#FFFFFF bg:#374349)]"
           "($style)"
         ];
       };
