@@ -2,14 +2,18 @@
   description = "AlGhoul's NixOS Configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devenv.url = "github:cachix/devenv/9ba9e3b908a12ddc6c43f88c52f2bf3c1d1e82c1";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixvim = {
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -19,7 +23,7 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = { nixpkgs, home-manager, devenv, ... }@inputs:
+  outputs = { nixpkgs, home-manager, devenv, nixvim, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
@@ -36,7 +40,12 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.alghoul = import ./home.nix;
+              home-manager.users.alghoul = {
+                imports = [
+                  ./home.nix
+                  nixvim.homeManagerModules.nixvim
+                ];
+              };
             }
           ];
         };
