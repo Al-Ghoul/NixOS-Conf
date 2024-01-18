@@ -40,10 +40,11 @@
     # Entire screen sharing
     xwaylandvideobridge
 
-    nixops_unstable
     virt-manager-qt
 
+    lazygit
     lazydocker
+    ripgrep
   ];
 
 }
