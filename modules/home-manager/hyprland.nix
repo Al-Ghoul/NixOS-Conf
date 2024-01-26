@@ -123,11 +123,6 @@
       windowrulev2 = noanim,class:^(wofi)$
       windowrulev2 = opacity 0.8 0.6,class:^(wofi)$
 
-      # Entire screen sharing
-      windowrulev2 = opacity 0.0 override 0.0 override,class:^(xwaylandvideobridge)$
-      windowrulev2 = noanim,class:^(xwaylandvideobridge)$
-      windowrulev2 = nofocus,class:^(xwaylandvideobridge)$
-      windowrulev2 = noinitialfocus,class:^(xwaylandvideobridge)$
 
       $mainMod = SUPER
 
