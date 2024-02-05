@@ -4,17 +4,18 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    [
+      # Include the results of the hardware scan.
+      ./hardware-configuration.nix
     ];
-  
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
 
   nix.settings = {
     # Enable Flakes and the new command-line tool
     experimental-features = [ "nix-command" "flakes" ];
-    trusted-users = [ 
+    trusted-users = [
       "root"
       "alghoul"
     ];
@@ -29,7 +30,7 @@
     opengl = {
       enable = true;
       driSupport = true;
-      driSupport32Bit = true; 
+      driSupport32Bit = true;
       extraPackages = [ pkgs.amdvlk pkgs.mesa ];
       extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
     };
@@ -37,17 +38,17 @@
 
 
   # Fix swaylock's login failure with correct password
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
 
   networking.hostName = "AlGhoul"; # Define your hostname.
   # Pick only one of the below networking options.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Africa/Cairo";
 
   # Enable the X11 windowing system.
-  services.xserver = { 
+  services.xserver = {
     enable = true;
     videoDrivers = [ "modesetting" ];
     displayManager = {
@@ -103,33 +104,35 @@
     wget
     git
     pkgs.libsForQt5.qt5.qtgraphicaleffects
-    (callPackage ./modules/nix-os/alghoul-sddm-theme.nix {})
+    (callPackage ./modules/nix-os/alghoul-sddm-theme.nix { })
     (easyeffects.overrideAttrs
-    {
-      preFixup = let
-        lv2Plugins = [
-          calf # compressor exciter, bass enhancer and others
-          zam-plugins # maximizer
-        ];
-        ladspaPlugins = [
-          (callPackage ./modules/nix-os/DeepFilterNet/deepfilter-ladspa.nix {})
-        ];
-      in ''
-        gappsWrapperArgs+=(
-        --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
-        --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
-        )
-      '';
-    })
+      {
+        preFixup =
+          let
+            lv2Plugins = [
+              calf # compressor exciter, bass enhancer and others
+              zam-plugins # maximizer
+            ];
+            ladspaPlugins = [
+              (callPackage ./modules/nix-os/DeepFilterNet/deepfilter-ladspa.nix { })
+            ];
+          in
+          ''
+            gappsWrapperArgs+=(
+            --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+            --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+            )
+          '';
+      })
     easyeffects
   ];
-  
+
   services.hydra = {
     enable = true;
     port = 3333;
     hydraURL = "http://localhost:3333";
     notificationSender = "hydra@localhost";
-    buildMachinesFiles = [];
+    buildMachinesFiles = [ ];
     useSubstitutes = true;
     minimumDiskFree = 20;
     minimumDiskFreeEvaluator = 20;
