@@ -21,6 +21,8 @@
                  "TablineFill",
                  "NvimTreeNormal",
                  "WhichKeyFloat",
+                 "Folded",
+
              }) do api.nvim_set_hl(0, v, {bg = "none"}) end
 
       '';
@@ -399,6 +401,10 @@
             nixd.enable = true;
             tsserver.enable = true;
             tailwindcss.enable = true;
+            clangd = {
+              enable = true;
+              cmd = [ "clangd" "--offset-encoding=utf-16" ];
+            };
           };
         };
 
