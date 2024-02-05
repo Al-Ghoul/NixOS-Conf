@@ -3,27 +3,85 @@
   programs = {
     nixvim = {
       enable = true;
-
+      # NOTE: Remove dap's configurations if you're willing to remove plugins.dap 
       extraConfigLua = ''
-        local api = vim.api
+        --[[
+        Well since nixvim dap's configurations option turning everything into 
+        a lua object, with values strictly turned to strings I have to set some options manually like
+        lldb's program option (it has to be a lua function)
+        ]] --
+          local dap = require("dap");
+          dap.configurations.cpp = { 
+            {
+              name = "Launch",
+              type = "lldb",
+              request = "launch",
+              program = function()
+                return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. '/', "file")
+              end,
+              cwd = "''${workspaceFolder}",
+              stopOnEntry = false,
+            }
+          }
+          dap.configurations.c = dap.configurations.cpp;
 
-        for _, v in ipairs({
-                 "Normal",
-                 "NormalNC",
-                 "LineNr",
-                 "NonText",
-                 "SignColumn",
-                 "CursorLineNr",
-                 "EndOfBuffer",
-                 "InsertEnter",
-                 "CursorLine",
-                 "NormalFloat",
-                 "TablineFill",
-                 "NvimTreeNormal",
-                 "WhichKeyFloat",
-                 "Folded",
+          local dapui = require("dapui")
+          dap.listeners.before.attach.dapui_config = function()
+            dapui.open()
+          end
+          dap.listeners.before.launch.dapui_config = function()
+            dapui.open()
+          end
+          dap.listeners.before.event_terminated.dapui_config = function()
+            dapui.close()
+          end
+          dap.listeners.before.event_exited.dapui_config = function()
+            dapui.close()
+          end
 
-             }) do api.nvim_set_hl(0, v, {bg = "none"}) end
+          vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
+          vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
+          vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
+          vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
+          vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
+          vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
+          vim.keymap.set('n', '<Leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
+          vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
+          vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
+          vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+          require('dap.ui.widgets').hover()
+          end)
+          vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+            require('dap.ui.widgets').preview()
+          end)
+          vim.keymap.set('n', '<Leader>df', function()
+            local widgets = require('dap.ui.widgets')
+            widgets.centered_float(widgets.frames)
+          end)
+          vim.keymap.set('n', '<Leader>ds', function()
+            local widgets = require('dap.ui.widgets')
+            widgets.centered_float(widgets.scopes)
+          end)
+        
+          local api = vim.api
+
+          for _, v in ipairs({
+                   "Normal",
+                   "NormalNC",
+                   "LineNr",
+                   "NonText",
+                   "SignColumn",
+                   "CursorLineNr",
+                   "EndOfBuffer",
+                   "InsertEnter",
+                   "CursorLine",
+                   "NormalFloat",
+                   "TablineFill",
+                   "NvimTreeNormal",
+                   "WhichKeyFloat",
+                   "Folded",
+
+               }) do api.nvim_set_hl(0, v, {bg = "none"}) end
 
       '';
 
@@ -449,6 +507,20 @@
         };
         lsp-format.enable = true;
         lsp-lines.enable = true;
+
+        dap = {
+          enable = true;
+          adapters = {
+            executables = {
+              lldb = {
+                command = "lldb-vscode";
+              };
+            };
+          };
+          extensions = {
+            dap-ui.enable = true;
+          };
+        };
       };
 
       extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim friendly-snippets ];
