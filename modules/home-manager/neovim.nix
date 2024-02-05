@@ -405,6 +405,7 @@
               enable = true;
               cmd = [ "clangd" "--offset-encoding=utf-16" ];
             };
+            cmake.enable = true;
           };
         };
 
