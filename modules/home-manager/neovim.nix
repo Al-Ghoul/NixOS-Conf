@@ -475,6 +475,7 @@
         };
         nvim-cmp = {
           enable = true;
+          snippet.expand = "luasnip";
           sources =
             [
               { name = "nvim_lsp"; }
@@ -523,7 +524,9 @@
         };
       };
 
-      extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim friendly-snippets ];
+
+
+      extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim friendly-snippets vim-highlightedyank vim-visual-multi ];
     };
 
     ripgrep.enable = true;
