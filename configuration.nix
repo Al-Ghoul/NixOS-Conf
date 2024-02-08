@@ -1,12 +1,13 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports =
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.sops-nix.nixosModules.sops
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -31,11 +32,14 @@
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = [ pkgs.amdvlk pkgs.mesa ];
+      extraPackages = with pkgs; [ amdvlk mesa rocmPackages.clr.icd ];
       extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
     };
   };
 
+  systemd.tmpfiles.rules = [
+    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
+  ];
 
   # Fix swaylock's login failure with correct password
   security.pam.services.swaylock = { };
@@ -125,6 +129,7 @@
           '';
       })
     easyeffects
+    sops
   ];
 
   services.hydra = {
@@ -140,6 +145,8 @@
       <git-input>
         timeout = 3600
       </git-input>
+      
+      Include ${config.sops.templates."hydra-github-token".path}
     '';
   };
 
@@ -166,6 +173,31 @@
     docker.enable = true;
     libvirtd.enable = true;
   };
+
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
+  sops.age.keyFile = "/home/alghoul/.config/sops/age/keys.txt";
+  sops.age.generateKey = true;
+
+  sops.secrets.cs-flashcards-google-services = {
+    group = "hydra";
+    mode = "440";
+    sopsFile = ./secrets/hydra/cs-flashcards-google-services.enc;
+    format = "binary";
+  };
+
+  sops.secrets.github-token = { };
+  sops.templates."hydra-github-token" = {
+    group = "hydra";
+    mode = "440";
+    content = ''
+      <github_authorization>
+        alghoul = bearer ${config.sops.placeholder.github-token}
+      </github_authorization>
+    '';
+  };
+
   networking.firewall.checkReversePath = false;
 
   # Open ports in the firewall.
