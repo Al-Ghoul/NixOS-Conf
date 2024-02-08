@@ -180,13 +180,6 @@
   sops.age.keyFile = "/home/alghoul/.config/sops/age/keys.txt";
   sops.age.generateKey = true;
 
-  sops.secrets.cs-flashcards-google-services = {
-    group = "hydra";
-    mode = "440";
-    sopsFile = ./secrets/hydra/cs-flashcards-google-services.enc;
-    format = "binary";
-  };
-
   sops.secrets.github-token = { };
   sops.templates."hydra-github-token" = {
     group = "hydra";
