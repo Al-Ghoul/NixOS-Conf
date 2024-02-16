@@ -1,11 +1,9 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     brave
+    webcord
     discord
-    neofetch
-
     obs-studio
-    #obsidian # Insecure ?
 
     # Text colorizes for fish
     grc
@@ -35,9 +33,6 @@
     # Wallpaper
     swww
     lxappearance-gtk2
-
-    # Entire screen sharing
-    xwaylandvideobridge
 
     virt-manager-qt
 
