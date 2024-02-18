@@ -70,8 +70,15 @@
               commitizen.enable = true;
               markdownlint.enable = true;
             };
+
+            scripts.pre.exec = ''
+              .git/hooks/pre-commit
+            '';
+
           })
+
         ];
+
 
       };
 
