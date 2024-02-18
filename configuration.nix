@@ -22,6 +22,9 @@
     ];
     sandbox = "relaxed";
   };
+  nix.package = pkgs.nixVersions.nix_2_19;
+  # NOTE: pin nix's nixpkgs to the exact version of nixpkgs used to build this config
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
