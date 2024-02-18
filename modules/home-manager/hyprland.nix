@@ -113,6 +113,17 @@
       windowrulev2 = opacity 0.8 0.8,class:^(brave)$
       windowrulev2 = animation popin,class:^(brave)$
 
+      # Obsidian
+      windowrulev2 = opacity 0.7 0.7,class:^(obsidian)$
+      windowrulev2 = animation popin,class:^(obsidian)$
+
+      # Discord
+      windowrulev2 = opacity 0.7 0.7,class:^(discord)$
+      windowrulev2 = animation popin,class:^(discord)$
+
+      # WebCord
+      windowrulev2 = opacity 0.7 0.7,class:^(webcord)$
+      windowrulev2 = animation popin,class:^(webcord)$
 
       # Thunar animation/opacity
       windowrulev2 = animation popin,class:^(thunar)$
