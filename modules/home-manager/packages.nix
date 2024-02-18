@@ -5,6 +5,8 @@
     discord
     obs-studio
 
+    obsidian
+
     # Text colorizes for fish
     grc
 
@@ -33,8 +35,6 @@
     # Wallpaper
     swww
     lxappearance-gtk2
-
-    virt-manager-qt
 
     lazydocker
   ];
