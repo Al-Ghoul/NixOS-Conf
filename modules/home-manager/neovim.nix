@@ -527,26 +527,27 @@
 
 
 
-      extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim friendly-snippets vim-highlightedyank vim-visual-multi ];
+      extraPlugins = with pkgs.vimPlugins; [
+        lazygit-nvim
+        friendly-snippets
+        vim-highlightedyank
+        vim-visual-multi
+      ];
     };
 
     ripgrep.enable = true;
     lazygit = {
       enable = true;
       settings = {
-        gui.theme = {
-          lightTheme = false;
-        };
-        customCommands = [
-          {
-            key = "C";
-            command = "git cz";
-            description = "commit with commitizen";
-            context = "files";
-            loadingText = "opening commitizen commit tool";
-            subprocess = true;
-          }
-        ];
+        gui.theme = { lightTheme = false; };
+        customCommands = [{
+          key = "C";
+          command = "git cz";
+          description = "commit with commitizen";
+          context = "files";
+          loadingText = "opening commitizen commit tool";
+          subprocess = true;
+        }];
       };
     };
   };
