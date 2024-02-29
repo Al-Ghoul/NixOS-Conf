@@ -62,7 +62,7 @@
             local widgets = require('dap.ui.widgets')
             widgets.centered_float(widgets.scopes)
           end)
-        
+
           local api = vim.api
 
           for _, v in ipairs({
@@ -296,6 +296,15 @@
           };
         }
         {
+          action = ":Telescope undo<CR>";
+          key = "<leader>tu";
+          mode = "n";
+          options = {
+            silent = true;
+            desc = "Open Telescope's undotree";
+          };
+        }
+        {
           action = ":NvimTreeFocus<CR>";
           key = "<leader>m";
           mode = "n";
@@ -431,7 +440,10 @@
           };
         };
         surround.enable = true;
-        telescope.enable = true;
+        telescope = {
+          enable = true;
+          extensions = { undo = { enable = true; }; };
+        };
         todo-comments.enable = true;
         toggleterm.enable = true;
         treesitter.enable = true;
@@ -451,7 +463,6 @@
         };
 
         obsidian.enable = true;
-
         lspsaga.enable = true;
         lsp = {
           enable = true;
