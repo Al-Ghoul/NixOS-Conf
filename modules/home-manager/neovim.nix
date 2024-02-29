@@ -62,7 +62,7 @@
             local widgets = require('dap.ui.widgets')
             widgets.centered_float(widgets.scopes)
           end)
-        
+
           local api = vim.api
 
           for _, v in ipairs({
@@ -296,6 +296,15 @@
           };
         }
         {
+          action = ":Telescope undo<CR>";
+          key = "<leader>tu";
+          mode = "n";
+          options = {
+            silent = true;
+            desc = "Open Telescope's undotree";
+          };
+        }
+        {
           action = ":NvimTreeFocus<CR>";
           key = "<leader>m";
           mode = "n";
@@ -431,7 +440,10 @@
           };
         };
         surround.enable = true;
-        telescope.enable = true;
+        telescope = {
+          enable = true;
+          extensions = { undo = { enable = true; }; };
+        };
         todo-comments.enable = true;
         toggleterm.enable = true;
         treesitter.enable = true;
@@ -450,8 +462,6 @@
           showTime = false;
         };
 
-        obsidian.enable = true;
-
         lspsaga.enable = true;
         lsp = {
           enable = true;
@@ -466,9 +476,9 @@
             cmake.enable = true;
             prismals.enable = true;
             jsonls.enable = true;
+            pyright.enable = true;
           };
         };
-
 
         luasnip = {
           enable = true;
@@ -477,13 +487,12 @@
         nvim-cmp = {
           enable = true;
           snippet.expand = "luasnip";
-          sources =
-            [
-              { name = "nvim_lsp"; }
-              { name = "luasnip"; }
-              { name = "path"; }
-              { name = "buffer"; }
-            ];
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "luasnip"; }
+            { name = "path"; }
+            { name = "buffer"; }
+          ];
 
           mapping = {
             "<C-Space>" = "cmp.mapping.complete()";
@@ -493,17 +502,11 @@
             "<CR>" = "cmp.mapping.confirm({ select = true })";
             "<S-Tab>" = {
               action = "cmp.mapping.select_prev_item()";
-              modes = [
-                "i"
-                "s"
-              ];
+              modes = [ "i" "s" ];
             };
             "<Tab>" = {
               action = "cmp.mapping.select_next_item()";
-              modes = [
-                "i"
-                "s"
-              ];
+              modes = [ "i" "s" ];
             };
           };
         };
@@ -513,40 +516,53 @@
         dap = {
           enable = true;
           adapters = {
-            executables = {
-              lldb = {
-                command = "lldb-vscode";
-              };
+            executables = { lldb = { command = "lldb-vscode"; }; };
+          };
+          extensions = { dap-ui.enable = true; };
+        };
+
+        none-ls = {
+          enable = true;
+          enableLspFormat = true;
+          sources = {
+            diagnostics = {
+              deadnix.enable = true;
+              statix.enable = true;
+              flake8.enable = true;
+              ruff.enable = true;
+              markdownlint.enable = true;
+            };
+            formatting = {
+              black.enable = true;
+              nixfmt.enable = true;
+              markdownlint.enable = true;
             };
           };
-          extensions = {
-            dap-ui.enable = true;
-          };
         };
+
       };
 
-
-
-      extraPlugins = with pkgs.vimPlugins; [ lazygit-nvim friendly-snippets vim-highlightedyank vim-visual-multi ];
+      extraPlugins = with pkgs.vimPlugins; [
+        lazygit-nvim
+        friendly-snippets
+        vim-highlightedyank
+        vim-visual-multi
+      ];
     };
 
     ripgrep.enable = true;
     lazygit = {
       enable = true;
       settings = {
-        gui.theme = {
-          lightTheme = false;
-        };
-        customCommands = [
-          {
-            key = "C";
-            command = "git cz";
-            description = "commit with commitizen";
-            context = "files";
-            loadingText = "opening commitizen commit tool";
-            subprocess = true;
-          }
-        ];
+        gui.theme = { lightTheme = false; };
+        customCommands = [{
+          key = "C";
+          command = "git cz";
+          description = "commit with commitizen";
+          context = "files";
+          loadingText = "opening commitizen commit tool";
+          subprocess = true;
+        }];
       };
     };
   };

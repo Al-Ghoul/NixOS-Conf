@@ -33,7 +33,7 @@
         gaps_in = 5
         gaps_out = 5
         border_size = 2
-        col.active_border = rgba(062C6Fee) rgba(000000ee) 90deg
+        col.active_border = rgba(062C6Fee) rgba(16caf3ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -45,11 +45,11 @@
       }
 
       decoration {
-        rounding = 10
+        rounding = 5
 
           blur {
             enabled = true
-              size = 5
+              size = 1
               passes = 3
               new_optimizations = true
           }
@@ -58,10 +58,11 @@
         blurls = lockscreen
 
 
-          drop_shadow = yes
-          shadow_range = 4
-          shadow_render_power = 3
+          drop_shadow = false
+          shadow_range = 10
+          shadow_render_power = 4
           col.shadow = rgba(1a1a1aee)
+          col.shadow_inactive=0x50000000
       }
 
       animations {
