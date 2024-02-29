@@ -487,13 +487,12 @@
         nvim-cmp = {
           enable = true;
           snippet.expand = "luasnip";
-          sources =
-            [
-              { name = "nvim_lsp"; }
-              { name = "luasnip"; }
-              { name = "path"; }
-              { name = "buffer"; }
-            ];
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "luasnip"; }
+            { name = "path"; }
+            { name = "buffer"; }
+          ];
 
           mapping = {
             "<C-Space>" = "cmp.mapping.complete()";
@@ -503,17 +502,11 @@
             "<CR>" = "cmp.mapping.confirm({ select = true })";
             "<S-Tab>" = {
               action = "cmp.mapping.select_prev_item()";
-              modes = [
-                "i"
-                "s"
-              ];
+              modes = [ "i" "s" ];
             };
             "<Tab>" = {
               action = "cmp.mapping.select_next_item()";
-              modes = [
-                "i"
-                "s"
-              ];
+              modes = [ "i" "s" ];
             };
           };
         };
