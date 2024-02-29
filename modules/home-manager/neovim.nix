@@ -476,9 +476,9 @@
             cmake.enable = true;
             prismals.enable = true;
             jsonls.enable = true;
+            pyright.enable = true;
           };
         };
-
 
         luasnip = {
           enable = true;
