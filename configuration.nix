@@ -3,12 +3,11 @@
 { config, lib, pkgs, inputs, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.sops-nix.nixosModules.sops
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    inputs.sops-nix.nixosModules.sops
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -16,19 +15,29 @@
   nix.settings = {
     # Enable Flakes and the new command-line tool
     experimental-features = [ "nix-command" "flakes" ];
-    trusted-users = [
-      "root"
-      "alghoul"
-    ];
+    trusted-users = [ "root" "alghoul" ];
     sandbox = "relaxed";
+    allowed-uris = [
+      "https://"
+      "github:NixOS/"
+      "github:nixos/"
+      "github:hercules-ci/"
+      "github:numtide/"
+      "github:cachix/"
+      "github:nix-community/"
+      "github:nix-systems/"
+    ];
+
   };
+  nix.extraOptions = ''
+    !include ${config.sops.templates."nix-extra-config".path}
+  '';
   nix.package = pkgs.nixVersions.nix_2_19;
   # NOTE: pin nix's nixpkgs to the exact version of nixpkgs used to build this config
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-  ];
+  fonts.packages = with pkgs;
+    [ (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
 
   hardware = {
     opengl = {
@@ -40,16 +49,16 @@
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
-  ];
+  systemd.tmpfiles.rules =
+    [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
 
   # Fix swaylock's login failure with correct password
   security.pam.services.swaylock = { };
 
   networking.hostName = "AlGhoul"; # Define your hostname.
   # Pick only one of the below networking options.
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable =
+    true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Africa/Cairo";
@@ -88,9 +97,7 @@
   programs.thunar.enable = true;
 
   # Allow non-free licensed programs
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
+  nixpkgs.config = { allowUnfree = true; };
 
   environment.variables.EDITOR = "nvim";
 
@@ -103,34 +110,40 @@
   users.users.alghoul.isNormalUser = true;
   users.users.alghoul.extraGroups = [ "wheel" "libvirtd" "docker" ];
 
-
+  programs.git = {
+    enable = true;
+    config = [{
+      user = {
+        email = "Abdo.AlGhouul@gmail.com";
+        name = "Abdo .AlGhoul";
+      };
+    }];
+  };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
-    git
     pkgs.libsForQt5.qt5.qtgraphicaleffects
     (callPackage ./modules/nix-os/alghoul-sddm-theme.nix { })
-    (easyeffects.overrideAttrs
-      {
-        preFixup =
-          let
-            lv2Plugins = [
-              calf # compressor exciter, bass enhancer and others
-              zam-plugins # maximizer
-            ];
-            ladspaPlugins = [
-              (callPackage ./modules/nix-os/DeepFilterNet/deepfilter-ladspa.nix { })
-            ];
-          in
-          ''
-            gappsWrapperArgs+=(
-            --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
-            --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
-            )
-          '';
-      })
+    (easyeffects.overrideAttrs {
+      preFixup =
+        let
+          lv2Plugins = [
+            calf # compressor exciter, bass enhancer and others
+            zam-plugins # maximizer
+          ];
+          ladspaPlugins = [
+            (callPackage ./modules/nix-os/DeepFilterNet/deepfilter-ladspa.nix { })
+          ];
+        in
+        ''
+          gappsWrapperArgs+=(
+          --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+          --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+          )
+        '';
+    })
     easyeffects
     sops
   ];
@@ -148,25 +161,23 @@
       <git-input>
         timeout = 3600
       </git-input>
-      
-      Include ${config.sops.templates."hydra-github-token".path}
+
+      Include "${config.sops.templates."hydra-github-token".path}"
     '';
   };
 
   services.postgresql = {
-    ensureUsers = [
-      {
-        name = "alghoul";
-        ensureClauses = {
-          login = true;
-          superuser = true;
-          bypassrls = true;
-          createdb = true;
-          replication = true;
-          createrole = true;
-        };
-      }
-    ];
+    ensureUsers = [{
+      name = "alghoul";
+      ensureClauses = {
+        login = true;
+        superuser = true;
+        bypassrls = true;
+        createdb = true;
+        replication = true;
+        createrole = true;
+      };
+    }];
     authentication = ''
       local   all             alghoul peer
     '';
@@ -176,6 +187,8 @@
     docker.enable = true;
     libvirtd.enable = true;
   };
+
+  programs.virt-manager.enable = true;
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
@@ -189,16 +202,18 @@
     mode = "440";
     content = ''
       <github_authorization>
-        alghoul = bearer ${config.sops.placeholder.github-token}
+        Al-Ghoul = Bearer ${config.sops.placeholder.github-token}
       </github_authorization>
     '';
   };
+  sops.templates."nix-extra-config" = {
+    content =
+      "access-tokens = github.com=${config.sops.placeholder.github-token}";
+    mode = "0440";
+  };
 
   networking.firewall.checkReversePath = false;
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -208,4 +223,3 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
 }
-
