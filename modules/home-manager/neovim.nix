@@ -516,19 +516,31 @@
         dap = {
           enable = true;
           adapters = {
-            executables = {
-              lldb = {
-                command = "lldb-vscode";
-              };
+            executables = { lldb = { command = "lldb-vscode"; }; };
+          };
+          extensions = { dap-ui.enable = true; };
+        };
+
+        none-ls = {
+          enable = true;
+          enableLspFormat = true;
+          sources = {
+            diagnostics = {
+              deadnix.enable = true;
+              statix.enable = true;
+              flake8.enable = true;
+              ruff.enable = true;
+              markdownlint.enable = true;
+            };
+            formatting = {
+              black.enable = true;
+              nixfmt.enable = true;
+              markdownlint.enable = true;
             };
           };
-          extensions = {
-            dap-ui.enable = true;
-          };
         };
+
       };
-
-
 
       extraPlugins = with pkgs.vimPlugins; [
         lazygit-nvim
