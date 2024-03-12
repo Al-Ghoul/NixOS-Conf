@@ -37,6 +37,11 @@
     lxappearance-gtk2
 
     lazydocker
+
+    spotify
+
+    termpdfpy
+    mdcat
   ];
 
 }
