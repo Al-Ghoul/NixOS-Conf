@@ -385,7 +385,7 @@
         providers.wl-copy.enable = true;
       };
 
-      colorschemes.oxocarbon = { enable = true; };
+      colorschemes.rose-pine = { enable = true; };
       plugins = {
         nix.enable = true;
         nix-develop.enable = true;
@@ -396,38 +396,27 @@
         };
         airline = {
           enable = true;
-          theme = "transparent";
+          settings.theme = "transparent";
         };
         which-key.enable = true;
-        auto-session = {
-          enable = true;
-          autoRestore.enabled = true;
-          autoSession.enabled = true;
-        };
-        barbecue.enable = true;
         better-escape.enable = true;
         comment-nvim.enable = true;
-        cursorline.enable = true;
-
-        diffview.enable = true;
-        emmet.enable = true;
-        efmls-configs.enable = true; # #
-        fidget.enable = true;
-        hmts.enable = true;
-        indent-blankline.enable = true;
         lastplace.enable = true;
-        lint.enable = true;
         markdown-preview.enable = true;
         navbuddy = {
           enable = true;
           lsp.autoAttach = true;
         };
         noice.enable = true;
-        nvim-colorizer.enable = true;
+        fidget.enable = true;
+        illuminate.enable = true;
         nvim-ufo.enable = true;
+        diffview.enable = true;
+        nvim-colorizer.enable = true;
+        emmet.enable = true;
+        hmts.enable = true;
         plantuml-syntax.enable = true;
         quickmath.enable = true;
-        specs.enable = true;
         spider = {
           enable = true;
           keymaps = {
@@ -445,7 +434,6 @@
           extensions = { undo = { enable = true; }; };
         };
         todo-comments.enable = true;
-        toggleterm.enable = true;
         treesitter.enable = true;
         treesitter-context.enable = true;
         rainbow-delimiters.enable = true;
@@ -462,7 +450,6 @@
           showTime = false;
         };
 
-        lspsaga.enable = true;
         lsp = {
           enable = true;
           servers = {
@@ -479,40 +466,38 @@
             pyright.enable = true;
           };
         };
+        lint.enable = true;
 
         luasnip = {
           enable = true;
           fromVscode = [{ }];
         };
-        nvim-cmp = {
+        cmp = {
           enable = true;
-          snippet.expand = "luasnip";
-          sources = [
-            { name = "nvim_lsp"; }
-            { name = "luasnip"; }
-            { name = "path"; }
-            { name = "buffer"; }
-          ];
-
-          mapping = {
-            "<C-Space>" = "cmp.mapping.complete()";
-            "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-            "<C-e>" = "cmp.mapping.close()";
-            "<C-f>" = "cmp.mapping.scroll_docs(4)";
-            "<CR>" = "cmp.mapping.confirm({ select = true })";
-            "<S-Tab>" = {
-              action = "cmp.mapping.select_prev_item()";
-              modes = [ "i" "s" ];
-            };
-            "<Tab>" = {
-              action = "cmp.mapping.select_next_item()";
-              modes = [ "i" "s" ];
+          settings = {
+            snippet.expand =
+              "function(args) require('luasnip').lsp_expand(args.body) end";
+            sources = [
+              { name = "nvim_lsp"; }
+              { name = "luasnip"; }
+              { name = "path"; }
+              { name = "buffer"; }
+            ];
+            mapping = {
+              "<C-Space>" = "cmp.mapping.complete()";
+              "<C-d>" = "cmp.mapping.scroll_docs(-4)";
+              "<C-e>" = "cmp.mapping.close()";
+              "<C-f>" = "cmp.mapping.scroll_docs(4)";
+              "<CR>" = "cmp.mapping.confirm({ select = true })";
+              "<S-Tab>" =
+                "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+              "<Tab>" =
+                "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
             };
           };
         };
         lsp-format.enable = true;
         lsp-lines.enable = true;
-
         dap = {
           enable = true;
           adapters = {
@@ -528,8 +513,6 @@
             diagnostics = {
               deadnix.enable = true;
               statix.enable = true;
-              flake8.enable = true;
-              ruff.enable = true;
               markdownlint.enable = true;
             };
             formatting = {
@@ -540,13 +523,15 @@
           };
         };
 
+        transparent.enable = true;
+        friendly-snippets.enable = true;
       };
 
       extraPlugins = with pkgs.vimPlugins; [
         lazygit-nvim
-        friendly-snippets
         vim-highlightedyank
         vim-visual-multi
+        vim-airline-themes
       ];
     };
 

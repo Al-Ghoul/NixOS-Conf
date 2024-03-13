@@ -12,32 +12,34 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
 
-  nix.settings = {
-    # Enable Flakes and the new command-line tool
-    experimental-features = [ "nix-command" "flakes" ];
-    trusted-users = [ "root" "alghoul" ];
-    sandbox = "relaxed";
-    allowed-uris = [
-      "https://"
-      "github:NixOS/"
-      "github:nixos/"
-      "github:hercules-ci/"
-      "github:numtide/"
-      "github:cachix/"
-      "github:nix-community/"
-      "github:nix-systems/"
-    ];
+  nix = {
+    settings = {
+      # Enable Flakes and the new command-line tool
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "alghoul" ];
+      sandbox = "relaxed";
+      allowed-uris = [
+        "https://"
+        "github:NixOS/"
+        "github:nixos/"
+        "github:hercules-ci/"
+        "github:numtide/"
+        "github:cachix/"
+        "github:nix-community/"
+        "github:nix-systems/"
+      ];
 
+    };
+    extraOptions = ''
+      !include ${config.sops.templates."nix-extra-config".path}
+    '';
+    package = pkgs.nixVersions.nix_2_19;
+    # NOTE: pin nix's nixpkgs to the exact version of nixpkgs used to build this config
+    registry.nixpkgs.flake = inputs.nixpkgs;
   };
-  nix.extraOptions = ''
-    !include ${config.sops.templates."nix-extra-config".path}
-  '';
-  nix.package = pkgs.nixVersions.nix_2_19;
-  # NOTE: pin nix's nixpkgs to the exact version of nixpkgs used to build this config
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
-  fonts.packages = with pkgs;
-    [ (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
+  fonts.packages =
+    [ (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
 
   hardware = {
     opengl = {
@@ -55,26 +57,14 @@
   # Fix swaylock's login failure with correct password
   security.pam.services.swaylock = { };
 
-  networking.hostName = "AlGhoul"; # Define your hostname.
-  # Pick only one of the below networking options.
-  networking.networkmanager.enable =
-    true; # Easiest to use and most distros use this by default.
+  networking = {
+    hostName = "AlGhoul";
+    networkmanager.enable = true;
+    firewall.checkReversePath = false;
+  };
 
   # Set your time zone.
   time.timeZone = "Africa/Cairo";
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "modesetting" ];
-    displayManager = {
-      sddm = {
-        enable = true;
-        theme = "AlGhoul-SDDM-Theme";
-      };
-      defaultSession = "hyprland";
-    };
-  };
 
   security.polkit.enable = true;
 
@@ -84,41 +74,42 @@
     platformTheme = "qt5ct";
   };
 
-  programs.hyprland.enable = true;
-
-  # Screen sharing
-  services.pipewire = {
-    enable = true;
-    audio.enable = true;
-    pulse.enable = true;
-    wireplumber.enable = true;
+  programs = {
+    hyprland.enable = true;
+    dconf.enable = true;
+    thunar.enable = true;
+    fish.enable = true;
+    git = {
+      enable = true;
+      config = [{
+        user = {
+          email = "Abdo.AlGhouul@gmail.com";
+          name = "Abdo .AlGhoul";
+        };
+      }];
+    };
+    virt-manager.enable = true;
   };
 
-  programs.thunar.enable = true;
-
   # Allow non-free licensed programs
-  nixpkgs.config = { allowUnfree = true; };
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [ "electron-25.9.0" "nix-2.16.2" ];
+    };
+  };
 
   environment.variables.EDITOR = "nvim";
 
-  programs.dconf.enable = true;
-
-  programs.fish.enable = true;
-  users.users.alghoul.shell = pkgs.fish;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.alghoul.isNormalUser = true;
-  users.users.alghoul.extraGroups = [ "wheel" "libvirtd" "docker" ];
-
-  programs.git = {
-    enable = true;
-    config = [{
-      user = {
-        email = "Abdo.AlGhouul@gmail.com";
-        name = "Abdo .AlGhoul";
-      };
-    }];
+  users.users = {
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    alghoul = {
+      shell = pkgs.fish;
+      isNormalUser = true;
+      extraGroups = [ "wheel" "libvirtd" "docker" ];
+    };
   };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -148,39 +139,66 @@
     sops
   ];
 
-  services.hydra = {
-    enable = true;
-    port = 3333;
-    hydraURL = "http://localhost:3333";
-    notificationSender = "hydra@localhost";
-    buildMachinesFiles = [ ];
-    useSubstitutes = true;
-    minimumDiskFree = 20;
-    minimumDiskFreeEvaluator = 20;
-    extraConfig = ''
-      <git-input>
-        timeout = 3600
-      </git-input>
-
-      Include "${config.sops.templates."hydra-github-token".path}"
-    '';
-  };
-
-  services.postgresql = {
-    ensureUsers = [{
-      name = "alghoul";
-      ensureClauses = {
-        login = true;
-        superuser = true;
-        bypassrls = true;
-        createdb = true;
-        replication = true;
-        createrole = true;
+  # Enable the X11 windowing system.
+  services = {
+    xserver = {
+      enable = true;
+      videoDrivers = [ "modesetting" ];
+      displayManager = {
+        sddm = {
+          enable = true;
+          theme = "AlGhoul-SDDM-Theme";
+          autoNumlock = true;
+          settings = {
+            Autologin = {
+              Session = "hyprland";
+              User = "alghoul";
+            };
+          };
+        };
+        defaultSession = "hyprland";
       };
-    }];
-    authentication = ''
-      local   all             alghoul peer
-    '';
+    };
+    # Screen sharing
+    pipewire = {
+      enable = true;
+      audio.enable = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
+    hydra = {
+      enable = true;
+      port = 3333;
+      hydraURL = "http://localhost:3333";
+      notificationSender = "hydra@localhost";
+      buildMachinesFiles = [ ];
+      useSubstitutes = true;
+      minimumDiskFree = 20;
+      minimumDiskFreeEvaluator = 20;
+      extraConfig = ''
+        <git-input>
+          timeout = 3600
+        </git-input>
+
+        Include "${config.sops.templates."hydra-github-token".path}"
+      '';
+    };
+    postgresql = {
+      ensureUsers = [{
+        name = "alghoul";
+        ensureClauses = {
+          login = true;
+          superuser = true;
+          bypassrls = true;
+          createdb = true;
+          replication = true;
+          createrole = true;
+        };
+      }];
+      authentication = ''
+        local   all             alghoul peer
+      '';
+    };
   };
 
   virtualisation = {
@@ -188,38 +206,52 @@
     libvirtd.enable = true;
   };
 
-  programs.virt-manager.enable = true;
+  sops = {
+    defaultSopsFile = ./secrets/secrets.yaml;
+    defaultSopsFormat = "yaml";
+    age = {
+      keyFile = "/home/alghoul/.config/sops/age/keys.txt";
+      generateKey = true;
+    };
+    secrets.github-token = { };
+    templates = {
+      "hydra-github-token" = {
+        group = "hydra";
+        mode = "440";
+        content = ''
+          <github_authorization>
+            Al-Ghoul = Bearer ${config.sops.placeholder.github-token}
+          </github_authorization>
+        '';
+      };
+      "nix-extra-config" = {
+        content =
+          "access-tokens = github.com=${config.sops.placeholder.github-token}";
+        mode = "0440";
+      };
 
-  sops.defaultSopsFile = ./secrets/secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
-
-  sops.age.keyFile = "/home/alghoul/.config/sops/age/keys.txt";
-  sops.age.generateKey = true;
-
-  sops.secrets.github-token = { };
-  sops.templates."hydra-github-token" = {
-    group = "hydra";
-    mode = "440";
-    content = ''
-      <github_authorization>
-        Al-Ghoul = Bearer ${config.sops.placeholder.github-token}
-      </github_authorization>
-    '';
+    };
   };
-  sops.templates."nix-extra-config" = {
-    content =
-      "access-tokens = github.com=${config.sops.placeholder.github-token}";
-    mode = "0440";
+
+  systemd = {
+    timers."kb-led-timer" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "1m";
+        OnUnitActiveSec = "5m";
+        Unit = "kb-led.service";
+      };
+    };
+    services."kb-led" = {
+      script = ''
+        ${pkgs.coreutils}/bin/echo 1 > /sys/class/leds/*::scrolllock/brightness
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
+    };
   };
 
-  networking.firewall.checkReversePath = false;
-  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "23.11";
 }

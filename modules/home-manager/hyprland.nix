@@ -49,7 +49,7 @@
 
           blur {
             enabled = true
-              size = 1
+              size = 5
               passes = 3
               new_optimizations = true
           }

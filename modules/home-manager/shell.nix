@@ -21,8 +21,7 @@
       name = "jetbrains mono nerd font";
     };
     settings = {
-      background = "#121212";
-      background_opacity = 1;
+      background_opacity = 0;
       inactive_border_color = "#062C6F";
       active_border_color = "#16caf3";
       enabled_layouts = "vertical,horizontal";
