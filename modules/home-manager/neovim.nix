@@ -99,44 +99,6 @@
         }
 
         {
-          action = "<C-w>h";
-          key = "<C-h>";
-          mode = "n";
-          options = {
-            noremap = true;
-            silent = true;
-            desc = "Navigate to the left screen/file/buffer";
-          };
-        }
-        {
-          action = "<C-w>j";
-          key = "<C-j>";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Navigate down to the bottom screen/file/buffer";
-          };
-        }
-        {
-          action = "<C-w>k";
-          key = "<C-k>";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Navigate up to the upper screen/file/buffer";
-          };
-        }
-        {
-          action = "<C-w>l";
-          key = "<C-l>";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Navigate to the right screen/file/buffer";
-          };
-        }
-
-        {
           action = ":noh<CR>";
           key = "<esc>";
           mode = "n";
@@ -523,6 +485,7 @@
           };
         };
 
+        tmux-navigator.enable = true;
         transparent.enable = true;
         friendly-snippets.enable = true;
       };

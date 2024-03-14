@@ -99,10 +99,6 @@
         force_default_wallpaper = -1 # Set to 0 to disable the anime mascot wallpapers
       }
 
-      # Example per-device config
-      device:epic-mouse-v1 {
-           sensitivity = -0.5
-      }
 
       # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 
