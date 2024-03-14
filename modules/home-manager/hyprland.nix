@@ -33,7 +33,7 @@
         gaps_in = 5
         gaps_out = 5
         border_size = 2
-        col.active_border = rgba(062C6Fee) rgba(16caf3ee) 90deg
+        col.active_border = rgba(705B06ee) rgba(F3E416ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -339,7 +339,7 @@
   services.mako = {
     enable = true;
     font = "Fantasque Sans Mono 14";
-    anchor = "center";
+    anchor = "top-right";
     defaultTimeout = 5000;
     sort = "-time";
 

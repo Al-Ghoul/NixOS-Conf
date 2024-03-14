@@ -27,7 +27,7 @@
         active_border_color = "#16caf3";
         enabled_layouts = "vertical,horizontal";
       };
-      theme = "GitHub Dark";
+      theme = "Rosé Pine";
       keybindings = {
         "ctrl+right" = "resize_window narrower";
         "ctrl+left" = "resize_window wider";
