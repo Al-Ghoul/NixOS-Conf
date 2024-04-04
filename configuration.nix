@@ -91,16 +91,23 @@
     virt-manager.enable = true;
   };
 
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+  };
   # Allow non-free licensed programs
   nixpkgs = {
     config = {
       allowUnfree = true;
       permittedInsecurePackages = [ "electron-25.9.0" "nix-2.16.2" ];
+      rocmSupport = true;
     };
   };
 
-  environment.variables.EDITOR = "nvim";
-
+  environment.variables = {
+    EDITOR = "nvim";
+    ROC_ENABLE_PRE_VEGA = "1";
+  };
   users.users = {
     # Define a user account. Don't forget to set a password with ‘passwd’.
     alghoul = {
@@ -225,9 +232,10 @@
         '';
       };
       "nix-extra-config" = {
+        group = "hydra";
+        mode = "440";
         content =
           "access-tokens = github.com=${config.sops.placeholder.github-token}";
-        mode = "0440";
       };
 
     };
@@ -251,6 +259,11 @@
         User = "root";
       };
     };
+  };
+
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "performance";
   };
 
   system.stateVersion = "23.11";

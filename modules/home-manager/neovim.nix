@@ -3,90 +3,88 @@
   programs = {
     nixvim = {
       enable = true;
+      autoCmd = [{
+        event = [ "FileType" ];
+        pattern = [
+          "startup"
+          "dapui_watches"
+          "dap-repl"
+          "dapui_console"
+          "dapui_stacks"
+          "dapui_breakpoints"
+          "dapui_scopes"
+          "help"
+        ];
+        callback = {
+          __raw =
+            "function() require('ufo').detach() vim.opt_local.foldenable = false end";
+        };
+      }];
       # NOTE: Remove dap's configurations if you're willing to remove plugins.dap 
       extraConfigLua = ''
-        --[[
-        Well since nixvim dap's configurations option turning everything into 
-        a lua object, with values strictly turned to strings I have to set some options manually like
-        lldb's program option (it has to be a lua function)
-        ]] --
-          local dap = require("dap");
-          dap.configurations.cpp = { 
-            {
-              name = "Launch",
-              type = "lldb",
-              request = "launch",
-              program = function()
-                return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. '/', "file")
-              end,
-              cwd = "''${workspaceFolder}",
-              stopOnEntry = false,
-            }
-          }
-          dap.configurations.c = dap.configurations.cpp;
+        local dap = require("dap")
+        local dapui = require("dapui")
+        dap.listeners.before.attach.dapui_config = function()
+          dapui.open()
+        end
+        dap.listeners.before.launch.dapui_config = function()
+          dapui.open()
+        end
+        dap.listeners.before.event_terminated.dapui_config = function()
+          dapui.close()
+        end
+        dap.listeners.before.event_exited.dapui_config = function()
+          dapui.close()
+        end
+          
+        vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
+        vim.keymap.set('n', '<S-F5>', function() require('dap').terminate() end)
+        vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
+        vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
+        vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
+        vim.keymap.set('n', '<Leader>dr', function() require('dap').restart() end)
 
-          local dapui = require("dapui")
-          dap.listeners.before.attach.dapui_config = function()
-            dapui.open()
-          end
-          dap.listeners.before.launch.dapui_config = function()
-            dapui.open()
-          end
-          dap.listeners.before.event_terminated.dapui_config = function()
-            dapui.close()
-          end
-          dap.listeners.before.event_exited.dapui_config = function()
-            dapui.close()
-          end
+        vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end)
+        vim.keymap.set('n', '<Leader>dB', function() require('dap').set_breakpoint() end)
 
-          vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
-          vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
-          vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
-          vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
-          vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
-          vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
-          vim.keymap.set('n', '<Leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
-          vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
-          vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
-          vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
-          require('dap.ui.widgets').hover()
-          end)
-          vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
-            require('dap.ui.widgets').preview()
-          end)
-          vim.keymap.set('n', '<Leader>df', function()
-            local widgets = require('dap.ui.widgets')
-            widgets.centered_float(widgets.frames)
-          end)
-          vim.keymap.set('n', '<Leader>ds', function()
-            local widgets = require('dap.ui.widgets')
-            widgets.centered_float(widgets.scopes)
-          end)
+        vim.keymap.set('n', '<Leader>dor', function() require('dap').repl.open() end)
+        vim.keymap.set('n', '<Leader>drl', function() require('dap').run_last() end)
 
-          local api = vim.api
+        vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+        require('dap.ui.widgets').hover()
+        end)
+        vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+          require('dap.ui.widgets').preview()
+        end)
+        vim.keymap.set('n', '<Leader>df', function()
+          local widgets = require('dap.ui.widgets')
+          widgets.centered_float(widgets.frames)
+        end)
+        vim.keymap.set('n', '<Leader>ds', function()
+          local widgets = require('dap.ui.widgets')
+          widgets.centered_float(widgets.scopes)
+        end)
 
-          for _, v in ipairs({
-                   "Normal",
-                   "NormalNC",
-                   "LineNr",
-                   "NonText",
-                   "SignColumn",
-                   "CursorLineNr",
-                   "EndOfBuffer",
-                   "InsertEnter",
-                   "CursorLine",
-                   "NormalFloat",
-                   "TablineFill",
-                   "NvimTreeNormal",
-                   "WhichKeyFloat",
-                   "Folded",
+        local api = vim.api
 
-               }) do api.nvim_set_hl(0, v, {bg = "none"}) end
+        for _, v in ipairs({
+                 "Normal",
+                 "NormalNC",
+                 "LineNr",
+                 "NonText",
+                 "SignColumn",
+                 "CursorLineNr",
+                 "EndOfBuffer",
+                 "InsertEnter",
+                 "CursorLine",
+                 "NormalFloat",
+                 "TablineFill",
+                 "WhichKeyFloat",
+                 "Folded",
 
+             }) do api.nvim_set_hl(0, v, {bg = "none"}) end
       '';
-
       globals = { mapleader = ","; };
-
       keymaps = [
         {
           action = ":LazyGit<CR>";
@@ -117,6 +115,7 @@
             desc = "Opens up Lspsaga's code actions";
           };
         }
+
         {
           action = ":Lspsaga peek_definition<CR>";
           key = "<leader>gd";
@@ -136,6 +135,7 @@
             desc = "Goto symbol's definition";
           };
         }
+
         {
           action = ":Lspsaga finder<CR>";
           key = "<leader>fd";
@@ -145,6 +145,7 @@
             desc = "Find symbol's definition in current buffer";
           };
         }
+
         {
           action = ":Lspsaga rename<CR>";
           key = "<leader>rn";
@@ -163,6 +164,7 @@
             desc = "Show diagnostics for the current line";
           };
         }
+
         {
           action = ":Lspsaga show_cursor_diagnostics<CR>";
           key = "<leader>d";
@@ -172,6 +174,7 @@
             desc = "Show diagnostics for the symbol under the cursor";
           };
         }
+
         {
           action = ":Lspsaga diagnostic_jump_prev<CR>";
           key = "<leader>pd";
@@ -191,6 +194,7 @@
             desc = "Jump to next diagnostic in current buffer";
           };
         }
+
         {
           action = ":Lspsaga hover_doc<CR>";
           key = "K";
@@ -202,89 +206,6 @@
         }
 
         {
-          action = ":Telescope keymaps<CR>";
-          key = "<leader>fk";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope's keymaps search";
-          };
-        }
-
-        {
-          action = ":Telescope help_tags<CR>";
-          key = "<leader>fh";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope's tags search";
-          };
-        }
-
-        {
-          action = ":Telescope find_files<CR>";
-          key = "<leader>ff";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope's files search";
-          };
-        }
-        {
-          action = ":Telescope<CR>";
-          key = "<leader>fa";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope";
-          };
-        }
-        {
-          action = ":Telescope live_grep<CR>";
-          key = "<leader>fg";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope's grep";
-          };
-        }
-        {
-          action = ":Telescope buffers<CR>";
-          key = "<leader>fb";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope's buffers search";
-          };
-        }
-        {
-          action = ":Telescope undo<CR>";
-          key = "<leader>tu";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Open Telescope's undotree";
-          };
-        }
-        {
-          action = ":NvimTreeFocus<CR>";
-          key = "<leader>m";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Move focus on nvim tree";
-          };
-        }
-        {
-          action = ":NvimTreeToggle<CR>";
-          key = "<leader>e";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Toggle nvim tree";
-          };
-        }
-        {
           action = "<gv";
           key = "<";
           mode = "v";
@@ -293,6 +214,7 @@
             desc = "Shift indentation to the left";
           };
         }
+
         {
           action = ">gv";
           key = ">";
@@ -347,14 +269,63 @@
         providers.wl-copy.enable = true;
       };
 
-      colorschemes.rose-pine = { enable = true; };
+      colorschemes.melange = { enable = true; };
+
       plugins = {
+        startup = {
+          enable = true;
+          # theme = null;
+          parts = [ "header" "body" ];
+          sections = {
+            body = {
+              align = "center";
+              content = [
+                [ " Find File" "FzfLua files" "<leader>ff" ]
+                [ "󰍉 Find Word" "FzfLua live_grep" "<leader>fg" ]
+                [ " Recent Files" "FzfLua oldfiles" "<leader>of" ]
+                [ " Colorschemes" "FzfLua colorschemes" "<leader>cs" ]
+                [ " New File" "lua require'startup'.new_file()" "<leader>nf" ]
+              ];
+              defaultColor = "";
+              foldSection = false;
+              highlight = "String";
+              margin = 5;
+              oldfilesAmount = 3;
+              title = "Basic Commands";
+              type = "mapping";
+            };
+            header = {
+              align = "center";
+              content = { __raw = "require('startup.headers').hydra_header"; };
+              defaultColor = "";
+              foldSection = false;
+              highlight = "Statement";
+              margin = 5;
+              oldfilesAmount = 0;
+              title = "Header";
+              type = "text";
+            };
+          };
+        };
         nix.enable = true;
         nix-develop.enable = true;
-        nvim-tree = {
+        fzf-lua = {
           enable = true;
-          disableNetrw = true;
-          openOnSetup = true;
+          keymaps = {
+            "<leader>fg" = "live_grep";
+            "<leader>ff" = "files";
+            "<leader>fk" = "keymaps";
+            "<leader>fb" = "buffers";
+          };
+        };
+        harpoon = {
+          enable = true;
+          keymaps = {
+            addFile = "<leader>a";
+            toggleQuickMenu = "<leader>e";
+            navNext = "<leader>pp";
+            navPrev = "<leader>nn";
+          };
         };
         airline = {
           enable = true;
@@ -391,15 +362,10 @@
           };
         };
         surround.enable = true;
-        telescope = {
-          enable = true;
-          extensions = { undo = { enable = true; }; };
-        };
         todo-comments.enable = true;
         treesitter.enable = true;
         treesitter-context.enable = true;
         rainbow-delimiters.enable = true;
-        ts-autotag.enable = true;
         vim-matchup.enable = true;
         wilder = {
           enable = true;
@@ -412,11 +378,12 @@
           showTime = false;
         };
 
+        lspsaga.enable = true;
+
         lsp = {
           enable = true;
           servers = {
             nixd.enable = true;
-            tsserver.enable = true;
             tailwindcss.enable = true;
             clangd = {
               enable = true;
@@ -429,6 +396,10 @@
           };
         };
         lint.enable = true;
+        typescript-tools = {
+          enable = true;
+          settings = { jsxCloseTag.enable = true; };
+        };
 
         luasnip = {
           enable = true;
@@ -465,6 +436,20 @@
           adapters = {
             executables = { lldb = { command = "lldb-vscode"; }; };
           };
+          configurations = rec {
+            cpp = [{
+              name = "C, C++ & Rust Debugger configurations";
+              type = "lldb";
+              request = "launch";
+              program = {
+                __raw =
+                  "function() return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file') end";
+              };
+              cwd = "\${workspaceFolder}";
+              stopOnEntry = false;
+            }];
+            c = cpp;
+          };
           extensions = { dap-ui.enable = true; };
         };
 
@@ -485,6 +470,51 @@
           };
         };
 
+        obsidian = {
+          enable = true;
+          settings = {
+            daily_notes = {
+              alias_format = "%B %-d, %Y";
+              date_format = "%Y-%m-%d";
+              folder = "~/repos/DailyNotes/";
+            };
+            workspaces = [
+              /* {
+                     name = "Main";
+                     path = "/mnt/HardDriveOne/Obsidian-Vault/";
+                   }
+              */
+
+              {
+                name = "Writings";
+                path = "~/repos/Writings/";
+              }
+            ];
+
+            mappings = {
+              gf = {
+                action = "require('obsidian').util.gf_passthrough";
+                opts = {
+                  noremap = false;
+                  expr = true;
+                  buffer = true;
+                };
+              };
+
+              "<leader>ch" = {
+                action = "require('obsidian').util.toggle_checkbox";
+                opts.buffer = true;
+              };
+            };
+
+            ui = {
+              enable = true;
+              update_debounce = 200;
+            };
+          };
+        };
+
+        undotree.enable = true;
         tmux-navigator.enable = true;
         transparent.enable = true;
         friendly-snippets.enable = true;
