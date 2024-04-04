@@ -20,9 +20,6 @@
     # library that sends desktop notifications to a notification daemon
     libnotify
 
-    # Hyprland utils
-    xdg-desktop-portal-hyprland
-
     # Clipboard manager
     cliphist
     wl-clipboard # required by cliphist
@@ -42,6 +39,7 @@
 
     termpdfpy
     mdcat
+    krita
   ];
 
 }

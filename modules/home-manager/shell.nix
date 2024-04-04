@@ -22,7 +22,8 @@
         name = "jetbrains mono nerd font";
       };
       settings = {
-        background_opacity = 0;
+        background = "#000000";
+        background_opacity = "0.8";
         inactive_border_color = "#062C6F";
         active_border_color = "#16caf3";
         enabled_layouts = "vertical,horizontal";
@@ -35,6 +36,7 @@
         "ctrl+down" = "resize_window shorter";
         "ctrl+home" = "resize_window reset";
         "ctrl+shift+t" = "new_tab_with_cwd";
+        "ctrl+shift+n" = "no_op";
       };
       shellIntegration = { enableFishIntegration = true; };
     };
@@ -51,6 +53,8 @@
           plugin = rose-pine;
           extraConfig = ''
             set -g @rose_pine_variant 'main' # Options are 'main', 'moon' or 'dawn'
+            set -g @rose_pine_bar_bg_disable 'on' 
+            set -g @rose_pine_bar_bg_disabled_color_option 'default'
           '';
         }
 

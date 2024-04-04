@@ -4,30 +4,29 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
- 
-  boot.kernelPackages = pkgs.linuxPackages_latest;                                                                                                                                                                 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/5c7ff1cc-7911-465f-8662-53e3ec23c0f0";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/5c7ff1cc-7911-465f-8662-53e3ec23c0f0";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9C1E-856F";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/9C1E-856F";
+    fsType = "vfat";
+  };
 
-  fileSystems."/mnt/HardDriveOne" =
-    { device = "/dev/disk/by-uuid/01D7BE88A6C1AFE0";
-      fsType = "ntfs3";
-    };
+  fileSystems."/mnt/HardDriveOne" = {
+    device = "/dev/disk/by-uuid/01D7BE88A6C1AFE0";
+    fsType = "ntfs3";
+  };
 
   swapDevices = [ ];
 
@@ -39,5 +38,6 @@
   # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
