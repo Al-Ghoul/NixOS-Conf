@@ -63,26 +63,18 @@
         vim.keymap.set('n', '<Leader>ds', function()
           local widgets = require('dap.ui.widgets')
           widgets.centered_float(widgets.scopes)
-        end)
+          end)
 
-        local api = vim.api
-
-        for _, v in ipairs({
-                 "Normal",
-                 "NormalNC",
-                 "LineNr",
-                 "NonText",
-                 "SignColumn",
-                 "CursorLineNr",
-                 "EndOfBuffer",
-                 "InsertEnter",
-                 "CursorLine",
-                 "NormalFloat",
-                 "TablineFill",
-                 "WhichKeyFloat",
-                 "Folded",
-
-             }) do api.nvim_set_hl(0, v, {bg = "none"}) end
+          -- resizing splits
+          vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+          vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+          vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+          vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+          -- moving between splits
+          vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+          vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+          vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+          vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
       '';
       globals = { mapleader = ","; };
       keymaps = [
@@ -269,7 +261,7 @@
         providers.wl-copy.enable = true;
       };
 
-      colorschemes.melange = { enable = true; };
+      colorschemes.oxocarbon = { enable = true; };
 
       plugins = {
         startup = {
@@ -338,6 +330,7 @@
         markdown-preview.enable = true;
         navbuddy = {
           enable = true;
+          useDefaultMapping = true;
           lsp.autoAttach = true;
         };
         noice.enable = true;
@@ -351,7 +344,7 @@
         plantuml-syntax.enable = true;
         quickmath.enable = true;
         spider = {
-          enable = true;
+          enable = false;
           keymaps = {
             motions = {
               b = "b";
@@ -363,7 +356,11 @@
         };
         surround.enable = true;
         todo-comments.enable = true;
-        treesitter.enable = true;
+        treesitter = {
+          enable = true;
+          nixvimInjections = true;
+          folding = true;
+        };
         treesitter-context.enable = true;
         rainbow-delimiters.enable = true;
         vim-matchup.enable = true;
@@ -393,13 +390,13 @@
             prismals.enable = true;
             jsonls.enable = true;
             pyright.enable = true;
+            tsserver.enable = true;
+            astro.enable = true;
           };
         };
         lint.enable = true;
-        typescript-tools = {
-          enable = true;
-          settings = { jsxCloseTag.enable = true; };
-        };
+
+        ts-autotag.enable = true;
 
         luasnip = {
           enable = true;
@@ -430,7 +427,6 @@
           };
         };
         lsp-format.enable = true;
-        lsp-lines.enable = true;
         dap = {
           enable = true;
           adapters = {
@@ -514,9 +510,23 @@
           };
         };
 
+        smart-splits = {
+          enable = true;
+          settings = {
+            ignored_events = [ "BufEnter" "WinEnter" ];
+            resize_mode = {
+              quit_key = "<ESC>";
+              resize_keys = [ "h" "j" "k" "l" ];
+              silent = true;
+            };
+          };
+        };
+
         undotree.enable = true;
-        tmux-navigator.enable = true;
-        transparent.enable = true;
+        transparent = {
+          enable = true;
+          settings.extra_groups = [ "Folded" "WhichKeyFloat" "NormalFloat" ];
+        };
         friendly-snippets.enable = true;
       };
 
