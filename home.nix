@@ -1,7 +1,7 @@
-{ config, lib, pkgs, ...} :
+{ ... }:
 
 {
-  imports = [ 
+  imports = [
     ./modules/home-manager/neovim.nix
     ./modules/home-manager/packages.nix
     ./modules/home-manager/starship.nix
@@ -11,7 +11,7 @@
     ./modules/home-manager/gtk.nix
     ./modules/home-manager/direnv.nix
   ];
-  
+
   home.username = "alghoul";
   home.homeDirectory = "/home/alghoul";
 
