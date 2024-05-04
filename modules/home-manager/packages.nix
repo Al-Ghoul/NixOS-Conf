@@ -1,8 +1,6 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     brave
-    webcord
-    discord
     obs-studio
 
     obsidian
@@ -37,9 +35,9 @@
 
     spotify
 
-    termpdfpy
     mdcat
-    krita
+
+    armcord
   ];
 
 }
