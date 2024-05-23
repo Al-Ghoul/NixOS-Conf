@@ -1,6 +1,8 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     brave
+    firefox-devedition
+
     obs-studio
 
     obsidian
@@ -38,6 +40,8 @@
     mdcat
 
     armcord
+
+    audacity
   ];
 
 }
