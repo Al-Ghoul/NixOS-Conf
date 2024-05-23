@@ -79,6 +79,16 @@
       globals = { mapleader = ","; };
       keymaps = [
         {
+          action = ":Format<CR>";
+          key = "<space>f";
+          mode = "n";
+          options = {
+            silent = true;
+            desc = "Format current buffer";
+          };
+        }
+
+        {
           action = ":LazyGit<CR>";
           key = "<leader>lg";
           mode = "n";
