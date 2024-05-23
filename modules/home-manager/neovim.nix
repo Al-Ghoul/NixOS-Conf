@@ -290,7 +290,7 @@
               ];
               defaultColor = "";
               foldSection = false;
-              highlight = "String";
+              highlight = "Statement";
               margin = 5;
               oldfilesAmount = 3;
               title = "Basic Commands";
@@ -299,7 +299,7 @@
             header = {
               align = "center";
               content = { __raw = "require('startup.headers').hydra_header"; };
-              defaultColor = "";
+              defaultColor = "#741616";
               foldSection = false;
               highlight = "Statement";
               margin = 5;
@@ -310,7 +310,6 @@
           };
         };
         nix.enable = true;
-        nix-develop.enable = true;
         fzf-lua = {
           enable = true;
           keymaps = {
@@ -402,6 +401,7 @@
             pyright.enable = true;
             tsserver.enable = true;
             astro.enable = true;
+            html.enable = true;
           };
         };
         lint.enable = true;
@@ -472,50 +472,6 @@
               black.enable = true;
               nixfmt.enable = true;
               markdownlint.enable = true;
-            };
-          };
-        };
-
-        obsidian = {
-          enable = true;
-          settings = {
-            daily_notes = {
-              alias_format = "%B %-d, %Y";
-              date_format = "%Y-%m-%d";
-              folder = "~/repos/DailyNotes/";
-            };
-            workspaces = [
-              /* {
-                     name = "Main";
-                     path = "/mnt/HardDriveOne/Obsidian-Vault/";
-                   }
-              */
-
-              {
-                name = "Writings";
-                path = "~/repos/Writings/";
-              }
-            ];
-
-            mappings = {
-              gf = {
-                action = "require('obsidian').util.gf_passthrough";
-                opts = {
-                  noremap = false;
-                  expr = true;
-                  buffer = true;
-                };
-              };
-
-              "<leader>ch" = {
-                action = "require('obsidian').util.toggle_checkbox";
-                opts.buffer = true;
-              };
-            };
-
-            ui = {
-              enable = true;
-              update_debounce = 200;
             };
           };
         };
