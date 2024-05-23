@@ -271,7 +271,7 @@
         providers.wl-copy.enable = true;
       };
 
-      colorschemes.oxocarbon = { enable = true; };
+      colorschemes.melange = { enable = true; };
 
       plugins = {
         startup = {
