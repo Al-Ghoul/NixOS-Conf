@@ -6,6 +6,10 @@
         set fish_greeting
         starship init fish | source
       '';
+      shellAbbrs = {
+        lg = "lazygit";
+        ld = "lazydocker";
+      };
       plugins = [
         # Enable a plugin (here grc for colorized command output) from nixpkgs
         {
@@ -23,7 +27,7 @@
       };
       settings = {
         background = "#000000";
-        background_opacity = "0.8";
+        background_opacity = "0";
         inactive_border_color = "#062C6F";
         active_border_color = "#16caf3";
         enabled_layouts = "vertical,horizontal";
