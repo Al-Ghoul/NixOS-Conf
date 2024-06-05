@@ -6,6 +6,7 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
+  boot.supportedFilesystems = [ "ntfs" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
@@ -25,7 +26,8 @@
 
   fileSystems."/mnt/HardDriveOne" = {
     device = "/dev/disk/by-uuid/01D7BE88A6C1AFE0";
-    fsType = "ntfs3";
+    fsType = "ntfs-3g";
+    options = [ "rw" "uid=1000" ];
   };
 
   swapDevices = [ ];
