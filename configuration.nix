@@ -130,6 +130,8 @@
           lv2Plugins = [
             calf # compressor exciter, bass enhancer and others
             zam-plugins # maximizer
+            lsp-plugins # delay, limiter, multiband compressor
+            mda_lv2 # loudness
           ];
           ladspaPlugins = [
             (callPackage ./modules/nix-os/DeepFilterNet/deepfilter-ladspa.nix { })
