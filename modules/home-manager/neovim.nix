@@ -75,19 +75,12 @@
           vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
           vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
           vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+
+          vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {})
+
       '';
       globals = { mapleader = ","; };
       keymaps = [
-        {
-          action = ":Format<CR>";
-          key = "<space>f";
-          mode = "n";
-          options = {
-            silent = true;
-            desc = "Format current buffer";
-          };
-        }
-
         {
           action = ":LazyGit<CR>";
           key = "<leader>lg";
@@ -436,7 +429,6 @@
             };
           };
         };
-        lsp-format.enable = true;
         dap = {
           enable = true;
           adapters = {
@@ -461,7 +453,6 @@
 
         none-ls = {
           enable = true;
-          enableLspFormat = true;
           sources = {
             diagnostics = {
               deadnix.enable = true;
