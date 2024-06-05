@@ -123,6 +123,7 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     pkgs.libsForQt5.qt5.qtgraphicaleffects
+    libsForQt5.kdenlive
     (callPackage ./modules/nix-os/alghoul-sddm-theme.nix { })
     (easyeffects.overrideAttrs {
       preFixup =
