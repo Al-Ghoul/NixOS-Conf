@@ -488,6 +488,8 @@
           };
         };
 
+        codeium-vim.enable = true;
+
         undotree.enable = true;
         transparent = {
           enable = true;
