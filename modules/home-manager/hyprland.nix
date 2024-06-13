@@ -33,7 +33,7 @@
         gaps_in = 5
         gaps_out = 5
         border_size = 2
-        col.active_border = rgba(705B06ee) rgba(F3E416ee) 90deg
+        col.active_border = rgba(13ACACee) rgba(16A0F3ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -105,7 +105,6 @@
       # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 
       # Kitty animation/opacity
-      windowrulev2 = opacity 0.8 0.8,class:^(kitty)$
       windowrulev2 = animation popin,class:^(kitty)$,title:^(update-sys)$1
 
       # Brave
