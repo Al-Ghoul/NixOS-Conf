@@ -116,9 +116,9 @@
       windowrulev2 = opacity 0.7 0.7,class:^(obsidian)$
       windowrulev2 = animation popin,class:^(obsidian)$
 
-      # Armcord
-      windowrulev2 = opacity 0.7 0.7,class:^(armcord)$
-      windowrulev2 = animation popin,class:^(armcord)$
+      # Vesktop/Discord
+      windowrulev2 = opacity 0.8 0.5,class:^(vesktop)$
+      windowrulev2 = animation popin,class:^(vesktop)$
 
       # Thunar animation/opacity
       windowrulev2 = animation popin,class:^(thunar)$
