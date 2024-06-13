@@ -264,7 +264,10 @@
         providers.wl-copy.enable = true;
       };
 
-      colorschemes.melange = { enable = true; };
+      colorschemes.nightfox = {
+        enable = true;
+        flavor = "carbonfox";
+      };
 
       plugins = {
         startup = {
