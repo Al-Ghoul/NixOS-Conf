@@ -93,7 +93,6 @@
 
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
   };
   # Allow non-free licensed programs
   nixpkgs = {
