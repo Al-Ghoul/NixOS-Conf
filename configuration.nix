@@ -91,9 +91,7 @@
     virt-manager.enable = true;
   };
 
-  xdg.portal = {
-    enable = true;
-  };
+  xdg.portal = { enable = true; };
   # Allow non-free licensed programs
   nixpkgs = {
     config = {
@@ -153,20 +151,20 @@
     xserver = {
       enable = true;
       videoDrivers = [ "modesetting" ];
-      displayManager = {
-        sddm = {
-          enable = true;
-          theme = "AlGhoul-SDDM-Theme";
-          autoNumlock = true;
-          settings = {
-            Autologin = {
-              Session = "hyprland";
-              User = "alghoul";
-            };
+    };
+    displayManager = {
+      sddm = {
+        enable = true;
+        theme = "AlGhoul-SDDM-Theme";
+        autoNumlock = true;
+        settings = {
+          Autologin = {
+            Session = "hyprland";
+            User = "alghoul";
           };
         };
-        defaultSession = "hyprland";
       };
+      defaultSession = "hyprland";
     };
     # Screen sharing
     pipewire = {

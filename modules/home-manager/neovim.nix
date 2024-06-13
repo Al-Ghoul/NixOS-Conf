@@ -221,7 +221,7 @@
         }
       ];
 
-      options = {
+      opts = {
         # Tabs / Indentation
         tabstop = 2;
         shiftwidth = 2;
@@ -328,7 +328,7 @@
         };
         which-key.enable = true;
         better-escape.enable = true;
-        comment-nvim.enable = true;
+        comment.enable = true;
         lastplace.enable = true;
         markdown-preview.enable = true;
         navbuddy = {
