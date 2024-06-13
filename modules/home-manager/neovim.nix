@@ -302,6 +302,7 @@
             };
           };
         };
+        oil.enable = true;
         nix.enable = true;
         fzf-lua = {
           enable = true;
@@ -373,8 +374,8 @@
 
         presence-nvim = {
           enable = true;
-          enableLineNumber = true;
           showTime = false;
+          mainImage = "file";
         };
 
         lspsaga.enable = true;
