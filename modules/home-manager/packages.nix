@@ -39,7 +39,7 @@
 
     mdcat
 
-    armcord
+    vesktop
 
     audacity
   ];
