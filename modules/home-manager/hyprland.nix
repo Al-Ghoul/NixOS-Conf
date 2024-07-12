@@ -11,6 +11,7 @@
         exec-once = mako # Notifications 
         exec-once = waybar # Staus bar 
         exec-once = wl-paste --watch cliphist store # Clipboard
+        exec-once = hyprctl setcursor Vimix-cursors 32 # Cursor
 
         input {
           kb_layout = us, ara
