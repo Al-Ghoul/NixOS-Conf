@@ -470,7 +470,14 @@
           settings.extra_groups = [ "Folded" "WhichKeyFloat" "NormalFloat" ];
         };
         friendly-snippets.enable = true;
+        neoscroll.enable = true;
         lazygit.enable = true;
+        mark-radar.enable = true;
+        marks.enable = true;
+        codesnap = {
+          enable = true;
+          settings = { watermark = "AlGhoul"; };
+        };
       };
 
       extraPlugins = with pkgs.vimPlugins; [
