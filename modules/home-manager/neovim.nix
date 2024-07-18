@@ -339,23 +339,10 @@
         fidget.enable = true;
         illuminate.enable = true;
         nvim-ufo.enable = true;
-        diffview.enable = true;
         nvim-colorizer.enable = true;
         emmet.enable = true;
         hmts.enable = true;
         plantuml-syntax.enable = true;
-        quickmath.enable = true;
-        spider = {
-          enable = false;
-          keymaps = {
-            motions = {
-              b = "b";
-              e = "e";
-              ge = "ge";
-              w = "w";
-            };
-          };
-        };
         surround.enable = true;
         todo-comments.enable = true;
         treesitter = {
