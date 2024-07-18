@@ -269,7 +269,6 @@
       plugins = {
         startup = {
           enable = true;
-          # theme = null;
           parts = [ "header" "body" ];
           sections = {
             body = {
@@ -372,11 +371,7 @@
           modes = [ "/" "?" ":" ];
         };
 
-        presence-nvim = {
-          enable = true;
-          showTime = false;
-          mainImage = "file";
-        };
+        neocord.enable = true;
 
         lspsaga.enable = true;
 
