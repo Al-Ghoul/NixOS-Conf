@@ -29,8 +29,8 @@
         "github:nix-community/"
         "github:nix-systems/"
       ];
-
     };
+    package = pkgs.nixVersions.nix_2_21;
     extraOptions = ''
       !include ${config.sops.templates."nix-extra-config".path}
     '';
