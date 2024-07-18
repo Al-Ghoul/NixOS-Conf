@@ -90,9 +90,6 @@
         special_scale_factor = 1 # Enables mainMod + P to put the screen on special work space on full
       }
 
-      master {
-        new_is_master = true
-      }
 
       gestures {
         workspace_swipe = off
