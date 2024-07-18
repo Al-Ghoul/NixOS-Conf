@@ -68,7 +68,6 @@
               nixpkgs-fmt.enable = true;
               nil.enable = true;
               commitizen.enable = true;
-              markdownlint.enable = true;
             };
 
             scripts.pre.exec = ''
