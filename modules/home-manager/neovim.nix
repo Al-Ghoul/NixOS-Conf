@@ -483,10 +483,10 @@
           settings.extra_groups = [ "Folded" "WhichKeyFloat" "NormalFloat" ];
         };
         friendly-snippets.enable = true;
+        lazygit.enable = true;
       };
 
       extraPlugins = with pkgs.vimPlugins; [
-        lazygit-nvim
         vim-highlightedyank
         vim-visual-multi
         vim-airline-themes
