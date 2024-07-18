@@ -11,6 +11,7 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.binfmt.emulatedSystems = [ "i686-windows" ];
 
   nix = {
     settings = {
@@ -33,7 +34,6 @@
     extraOptions = ''
       !include ${config.sops.templates."nix-extra-config".path}
     '';
-    package = pkgs.nixVersions.nix_2_19;
     # NOTE: pin nix's nixpkgs to the exact version of nixpkgs used to build this config
     registry.nixpkgs.flake = inputs.nixpkgs;
   };
@@ -42,10 +42,8 @@
     [ (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
 
   hardware = {
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
       extraPackages = with pkgs; [ amdvlk mesa rocmPackages.clr.icd ];
       extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
     };
@@ -56,6 +54,32 @@
 
   # Fix swaylock's login failure with correct password
   security.pam.services.swaylock = { };
+  security.pam.loginLimits = [
+    {
+      domain = "@audio";
+      item = "memlock";
+      type = "-";
+      value = "unlimited";
+    }
+    {
+      domain = "@audio";
+      item = "rtprio";
+      type = "-";
+      value = "99";
+    }
+    {
+      domain = "@audio";
+      item = "nofile";
+      type = "soft";
+      value = "99999";
+    }
+    {
+      domain = "@audio";
+      item = "nofile";
+      type = "hard";
+      value = "99999";
+    }
+  ];
 
   networking = {
     hostName = "AlGhoul";
@@ -96,15 +120,31 @@
   nixpkgs = {
     config = {
       allowUnfree = true;
-      permittedInsecurePackages = [ "electron-25.9.0" "nix-2.16.2" ];
+      permittedInsecurePackages = [ "electron-25.9.0" ];
       rocmSupport = true;
     };
   };
 
-  environment.variables = {
-    EDITOR = "nvim";
-    ROC_ENABLE_PRE_VEGA = "1";
-  };
+  environment.variables =
+    let
+      makePluginPath = format:
+        (lib.strings.makeSearchPath format [
+          "$HOME/.nix-profile/lib"
+          "/run/current-system/sw/lib"
+          "/etc/profiles/per-user/$USER/lib"
+        ]) + ":$HOME/.${format}";
+    in
+    {
+      DSSI_PATH = makePluginPath "dssi";
+      LADSPA_PATH = makePluginPath "ladspa";
+      LV2_PATH = makePluginPath "lv2";
+      LXVST_PATH = makePluginPath "lxvst";
+      VST_PATH = makePluginPath "vst";
+      VST3_PATH = makePluginPath "vst3";
+      EDITOR = "nvim";
+      ROC_ENABLE_PRE_VEGA = "1";
+    };
+
   users.users = {
     # Define a user account. Don't forget to set a password with ‘passwd’.
     alghoul = {
@@ -119,7 +159,7 @@
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
-    pkgs.libsForQt5.qt5.qtgraphicaleffects
+    libsForQt5.qt5.qtgraphicaleffects
     libsForQt5.kdenlive
     (callPackage ./modules/nix-os/alghoul-sddm-theme.nix { })
     (easyeffects.overrideAttrs {
@@ -169,6 +209,11 @@
     # Screen sharing
     pipewire = {
       enable = true;
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
+      jack.enable = true;
       audio.enable = true;
       pulse.enable = true;
       wireplumber.enable = true;
