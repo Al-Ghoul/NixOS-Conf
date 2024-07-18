@@ -44,13 +44,10 @@
   hardware = {
     graphics = {
       enable = true;
-      extraPackages = with pkgs; [ amdvlk mesa rocmPackages.clr.icd ];
+      extraPackages = with pkgs; [ amdvlk mesa ];
       extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
     };
   };
-
-  systemd.tmpfiles.rules =
-    [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
 
   # Fix swaylock's login failure with correct password
   security.pam.services.swaylock = { };
@@ -121,7 +118,6 @@
     config = {
       allowUnfree = true;
       permittedInsecurePackages = [ "electron-25.9.0" ];
-      rocmSupport = true;
     };
   };
 
@@ -142,7 +138,6 @@
       VST_PATH = makePluginPath "vst";
       VST3_PATH = makePluginPath "vst3";
       EDITOR = "nvim";
-      ROC_ENABLE_PRE_VEGA = "1";
     };
 
   users.users = {
