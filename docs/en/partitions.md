@@ -22,7 +22,7 @@ yields the following error (if you did NOT experience this error skip this step 
 mount: /mnt/HardDriveTwo: unknown filesystem type 'ntfs'.
        dmesg(1) may have more information after failed mount system call.
 ```
-This is because the Hard drive's format is in ntfs (Used by windows OS) we've to pass `nfts3` as a type flag
+This is because the Hard drive's format is in ntfs (Used by windows OS) we've to pass `ntfs3` as a type flag
 ```bash
 sudo mount /dev/sdb1 /mnt/HardDriveTwo -t ntfs3
 ```
