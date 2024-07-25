@@ -355,7 +355,7 @@
       * {
         font-family: "JetBrainsMono Nerd Font";
       }
-      
+
       window#waybar {
         background: rgba(0, 0, 0, 0);
         font-size: 0.8rem;
@@ -368,17 +368,14 @@
 
       .modules-left,
       .modules-center {
-        background: linear-gradient(45deg, rgba(8, 84, 203, 1), rgba(8, 147, 203, 1));
+        background: radial-gradient(circle, rgba(180,9,9,1) 0%, rgba(19,25,32,1) 100%);
         border-radius: 0.5rem;
         padding: 2px;
       }
 
       .modules-right {
-        background-color: rgba(18,18,18,0.7);
+        background: radial-gradient(circle, rgba(180,9,9,1) 0%, rgba(19,25,32,1) 90%);
         border-radius: 0.5rem;
-        border-width: 1px;
-        border-style: solid;
-        border-color: #1A5ECA;
         padding: 2px 2px 2px 10px;
       }
 
@@ -403,7 +400,7 @@
        }
 
        #workspaces button.active {
-         color: #1A5ECA;
+         color: #CA1A1A;
        }
 
        #workspaces button.urgent {
