@@ -437,11 +437,6 @@
         none-ls = {
           enable = true;
           sources = {
-            diagnostics = {
-              deadnix.enable = true;
-              statix.enable = true;
-              markdownlint.enable = true;
-            };
             formatting = {
               black.enable = true;
               nixfmt.enable = true;
