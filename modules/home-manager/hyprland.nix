@@ -34,7 +34,7 @@
         gaps_in = 3
         gaps_out = 3
         border_size = 2
-        col.active_border = rgba(13ACACee) rgba(16A0F3ee) 90deg
+        col.active_border = rgba(AC1313ee) rgba(000000ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -59,7 +59,6 @@
 
 
         blurls = lockscreen
-
 
           drop_shadow = false
           shadow_range = 10
