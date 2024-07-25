@@ -275,7 +275,7 @@
               align = "center";
               content = [
                 [ " Find File" "FzfLua files" "<leader>ff" ]
-                [ "󰍉 Find Word" "FzfLua live_grep" "<leader>fg" ]
+                [ " Find Word" "FzfLua live_grep" "<leader>fg" ]
                 [ " Recent Files" "FzfLua oldfiles" "<leader>of" ]
                 [ " Colorschemes" "FzfLua colorschemes" "<leader>cs" ]
                 [ " New File" "lua require'startup'.new_file()" "<leader>nf" ]
