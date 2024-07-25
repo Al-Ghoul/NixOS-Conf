@@ -378,6 +378,12 @@
             tsserver.enable = true;
             astro.enable = true;
             html.enable = true;
+            cssls.enable = true;
+            marksman.enable = true;
+            nginx-language-server.enable = true;
+            sqls.enable = true;
+            phpactor.enable = true;
+            zls.enable = true;
           };
         };
         lint.enable = true;
@@ -388,6 +394,7 @@
           enable = true;
           fromVscode = [{ }];
         };
+
         cmp = {
           enable = true;
           settings = {
