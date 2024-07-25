@@ -42,6 +42,7 @@
     vesktop
 
     audacity
+    pomodoro-gtk
   ];
 
 }
