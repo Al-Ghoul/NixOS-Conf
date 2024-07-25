@@ -264,7 +264,7 @@
         providers.wl-copy.enable = true;
       };
 
-      colorschemes.rose-pine = { enable = true; };
+      colorschemes.oxocarbon = { enable = true; };
 
       plugins = {
         startup = {
