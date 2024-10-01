@@ -7,7 +7,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devenv.url = "github:cachix/devenv";
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +25,6 @@
   outputs = {
     nixpkgs,
     home-manager,
-    devenv,
     nixvim,
     ...
   } @ inputs: let
@@ -54,30 +52,6 @@
           }
         ];
       };
-    };
-
-    devShells.x86_64-linux.default = devenv.lib.mkShell {
-      inherit inputs pkgs;
-
-      modules = [
-        ({...}: {
-          packages = with pkgs; [
-            yarn
-            cz-cli # commitizen
-          ];
-
-          pre-commit.hooks = {
-            deadnix.enable = true;
-            alejandra.enable = true;
-            nil.enable = true;
-            commitizen.enable = true;
-          };
-
-          scripts.pre.exec = ''
-            .git/hooks/pre-commit
-          '';
-        })
-      ];
     };
   };
 }
