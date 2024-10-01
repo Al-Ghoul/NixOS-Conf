@@ -166,9 +166,7 @@
             lsp-plugins # delay, limiter, multiband compressor
             mda_lv2 # loudness
           ];
-          ladspaPlugins = [
-            (callPackage ./modules/nix-os/DeepFilterNet/deepfilter-ladspa.nix { })
-          ];
+          ladspaPlugins = [ deepfilternet ];
         in
         ''
           gappsWrapperArgs+=(
