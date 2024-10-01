@@ -448,7 +448,6 @@
               mdformat.enable = true;
               htmlbeautifier.enable = true;
               phpcsfixer.enable = true;
-              prisma_format.enable = true;
               prettierd.enable = true;
             };
           };
