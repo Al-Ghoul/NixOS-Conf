@@ -467,7 +467,31 @@
           };
         };
 
-        codeium-vim.enable = true;
+        codeium-vim = let
+          codeiumPkg = pkgs.codeium.overrideAttrs (prevAttrs: rec {
+            version = "1.8.59";
+            plat = "linux_x64";
+            src = pkgs.fetchurl {
+              name = "${prevAttrs.pname}-${version}.gz";
+              url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${version}/language_server_${plat}.gz";
+              hash = "sha256-j+5ckDfn87vvaGk+c+yHfF/F5KLLOLirPaR582kUD5U=";
+            };
+          });
+        in {
+          enable = true;
+          package = pkgs.vimPlugins.codeium-vim.overrideAttrs (finalAttr: p: {
+            version = "git";
+            src = pkgs.fetchFromGitHub {
+              owner = "Exafunction";
+              repo = "codeium.vim";
+              rev = "5644ac5a0e098ca0cf5deed1c909c3fa5e9901f3";
+              sha256 = "sha256-7XElW/54T6VlUJwvXFr4PumrX96jyzZi5XqA9n7hLJA=";
+            };
+          });
+          settings = {
+            bin = "${codeiumPkg}/bin/codeium_language_server";
+          };
+        };
 
         undotree.enable = true;
         transparent = {
