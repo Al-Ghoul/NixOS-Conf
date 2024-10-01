@@ -23,63 +23,61 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = { nixpkgs, home-manager, devenv, nixvim, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-      nixosConfigurations = {
-        AlGhoul = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-
-          modules = [
-            ./configuration.nix
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.alghoul = {
-                imports = [
-                  ./home.nix
-                  nixvim.homeManagerModules.nixvim
-                ];
-              };
-            }
-          ];
-        };
-      };
-
-      devShells.x86_64-linux.default = devenv.lib.mkShell {
-        inherit inputs pkgs;
+  outputs = {
+    nixpkgs,
+    home-manager,
+    devenv,
+    nixvim,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in {
+    nixosConfigurations = {
+      AlGhoul = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {inherit inputs;};
 
         modules = [
-          ({ ... }: {
+          ./configuration.nix
 
-            packages = with pkgs; [
-              yarn
-              cz-cli # commitizen
-            ];
-
-            pre-commit.hooks = {
-              deadnix.enable = true;
-              nixpkgs-fmt.enable = true;
-              nil.enable = true;
-              commitizen.enable = true;
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.alghoul = {
+              imports = [
+                ./home.nix
+                nixvim.homeManagerModules.nixvim
+              ];
             };
-
-            scripts.pre.exec = ''
-              .git/hooks/pre-commit
-            '';
-
-          })
-
+          }
         ];
-
-
       };
-
     };
+
+    devShells.x86_64-linux.default = devenv.lib.mkShell {
+      inherit inputs pkgs;
+
+      modules = [
+        ({...}: {
+          packages = with pkgs; [
+            yarn
+            cz-cli # commitizen
+          ];
+
+          pre-commit.hooks = {
+            deadnix.enable = true;
+            alejandra.enable = true;
+            nil.enable = true;
+            commitizen.enable = true;
+          };
+
+          scripts.pre.exec = ''
+            .git/hooks/pre-commit
+          '';
+        })
+      ];
+    };
+  };
 }
