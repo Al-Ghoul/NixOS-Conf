@@ -225,17 +225,31 @@
       '';
     };
     postgresql = {
-      ensureUsers = [{
-        name = "alghoul";
-        ensureClauses = {
-          login = true;
-          superuser = true;
-          bypassrls = true;
-          createdb = true;
-          replication = true;
-          createrole = true;
-        };
-      }];
+      ensureUsers = [
+        {
+          name = "alghoul";
+          ensureClauses = {
+            login = true;
+            superuser = true;
+            bypassrls = true;
+            createdb = true;
+            replication = true;
+            createrole = true;
+          };
+        }
+        {
+          name = "hydra";
+          ensureClauses = {
+            login = true;
+            superuser = true;
+            bypassrls = true;
+            createdb = true;
+            replication = true;
+            createrole = true;
+          };
+        }
+      ];
+      ensureDatabases = [ "hydra" ];
       authentication = ''
         local   all             alghoul peer
       '';
@@ -271,7 +285,6 @@
         content =
           "access-tokens = github.com=${config.sops.placeholder.github-token}";
       };
-
     };
   };
 
