@@ -341,7 +341,7 @@
         emmet.enable = true;
         hmts.enable = true;
         plantuml-syntax.enable = true;
-        surround.enable = true;
+        vim-surround.enable = true;
         todo-comments.enable = true;
         treesitter = {
           enable = true;
@@ -359,6 +359,7 @@
         neocord.enable = true;
 
         lspsaga.enable = true;
+        web-devicons.enable = true;
 
         lsp = {
           enable = true;
@@ -373,7 +374,7 @@
             prismals.enable = true;
             jsonls.enable = true;
             pyright.enable = true;
-            tsserver.enable = true;
+            ts-ls.enable = true;
             astro.enable = true;
             html.enable = true;
             cssls.enable = true;
