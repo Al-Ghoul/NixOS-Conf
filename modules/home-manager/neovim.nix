@@ -444,7 +444,7 @@
           sources = {
             formatting = {
               black.enable = true;
-              nixfmt.enable = true;
+              alejandra.enable = true;
               mdformat.enable = true;
               htmlbeautifier.enable = true;
               phpcsfixer.enable = true;
