@@ -279,26 +279,6 @@
     };
   };
 
-  systemd = {
-    timers."kb-led-timer" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = "1m";
-        OnUnitActiveSec = "5m";
-        Unit = "kb-led.service";
-      };
-    };
-    services."kb-led" = {
-      script = ''
-        ${pkgs.coreutils}/bin/echo 1 > /sys/class/leds/*::scrolllock/brightness
-      '';
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-      };
-    };
-  };
-
   powerManagement = {
     enable = true;
     cpuFreqGovernor = "performance";
