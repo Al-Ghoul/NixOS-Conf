@@ -1,26 +1,29 @@
-{ nixvim, pkgs, ... }: {
-
+{
+  pkgs,
+  ...
+}: {
   programs = {
     nixvim = {
       enable = true;
-      autoCmd = [{
-        event = [ "FileType" ];
-        pattern = [
-          "startup"
-          "dapui_watches"
-          "dap-repl"
-          "dapui_console"
-          "dapui_stacks"
-          "dapui_breakpoints"
-          "dapui_scopes"
-          "help"
-        ];
-        callback = {
-          __raw =
-            "function() require('ufo').detach() vim.opt_local.foldenable = false end";
-        };
-      }];
-      # NOTE: Remove dap's configurations if you're willing to remove plugins.dap 
+      autoCmd = [
+        {
+          event = ["FileType"];
+          pattern = [
+            "startup"
+            "dapui_watches"
+            "dap-repl"
+            "dapui_console"
+            "dapui_stacks"
+            "dapui_breakpoints"
+            "dapui_scopes"
+            "help"
+          ];
+          callback = {
+            __raw = "function() require('ufo').detach() vim.opt_local.foldenable = false end";
+          };
+        }
+      ];
+      # NOTE: Remove dap's configurations if you're willing to remove plugins.dap
       extraConfigLua = ''
         local dap = require("dap")
         local dapui = require("dapui")
@@ -36,7 +39,7 @@
         dap.listeners.before.event_exited.dapui_config = function()
           dapui.close()
         end
-          
+
         vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
         vim.keymap.set('n', '<S-F5>', function() require('dap').terminate() end)
         vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
@@ -79,7 +82,7 @@
           vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {})
 
       '';
-      globals = { mapleader = ","; };
+      globals = {mapleader = ",";};
       keymaps = [
         {
           action = ":LazyGit<CR>";
@@ -267,16 +270,16 @@
       plugins = {
         startup = {
           enable = true;
-          parts = [ "header" "body" ];
+          parts = ["header" "body"];
           sections = {
             body = {
               align = "center";
               content = [
-                [ " Find File" "FzfLua files" "<leader>ff" ]
-                [ " Find Word" "FzfLua live_grep" "<leader>fg" ]
-                [ " Recent Files" "FzfLua oldfiles" "<leader>of" ]
-                [ " Colorschemes" "FzfLua colorschemes" "<leader>cs" ]
-                [ " New File" "lua require'startup'.new_file()" "<leader>nf" ]
+                [" Find File" "FzfLua files" "<leader>ff"]
+                [" Find Word" "FzfLua live_grep" "<leader>fg"]
+                [" Recent Files" "FzfLua oldfiles" "<leader>of"]
+                [" Colorschemes" "FzfLua colorschemes" "<leader>cs"]
+                [" New File" "lua require'startup'.new_file()" "<leader>nf"]
               ];
               defaultColor = "";
               foldSection = false;
@@ -288,7 +291,7 @@
             };
             header = {
               align = "center";
-              content = { __raw = "require('startup.headers').hydra_header"; };
+              content = {__raw = "require('startup.headers').hydra_header";};
               defaultColor = "#741616";
               foldSection = false;
               highlight = "Statement";
@@ -353,7 +356,7 @@
         vim-matchup.enable = true;
         wilder = {
           enable = true;
-          modes = [ "/" "?" ":" ];
+          modes = ["/" "?" ":"];
         };
 
         neocord.enable = true;
@@ -368,7 +371,7 @@
             tailwindcss.enable = true;
             clangd = {
               enable = true;
-              cmd = [ "clangd" "--offset-encoding=utf-16" ];
+              cmd = ["clangd" "--offset-encoding=utf-16"];
             };
             cmake.enable = true;
             prismals.enable = true;
@@ -391,19 +394,18 @@
 
         luasnip = {
           enable = true;
-          fromVscode = [{ }];
+          fromVscode = [{}];
         };
 
         cmp = {
           enable = true;
           settings = {
-            snippet.expand =
-              "function(args) require('luasnip').lsp_expand(args.body) end";
+            snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
             sources = [
-              { name = "nvim_lsp"; }
-              { name = "luasnip"; }
-              { name = "path"; }
-              { name = "buffer"; }
+              {name = "nvim_lsp";}
+              {name = "luasnip";}
+              {name = "path";}
+              {name = "buffer";}
             ];
             mapping = {
               "<C-Space>" = "cmp.mapping.complete()";
@@ -411,33 +413,32 @@
               "<C-e>" = "cmp.mapping.close()";
               "<C-f>" = "cmp.mapping.scroll_docs(4)";
               "<CR>" = "cmp.mapping.confirm({ select = true })";
-              "<S-Tab>" =
-                "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
-              "<Tab>" =
-                "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+              "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+              "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
             };
           };
         };
         dap = {
           enable = true;
           adapters = {
-            executables = { lldb = { command = "lldb-vscode"; }; };
+            executables = {lldb = {command = "lldb-vscode";};};
           };
           configurations = rec {
-            cpp = [{
-              name = "C, C++ & Rust Debugger configurations";
-              type = "lldb";
-              request = "launch";
-              program = {
-                __raw =
-                  "function() return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file') end";
-              };
-              cwd = "\${workspaceFolder}";
-              stopOnEntry = false;
-            }];
+            cpp = [
+              {
+                name = "C, C++ & Rust Debugger configurations";
+                type = "lldb";
+                request = "launch";
+                program = {
+                  __raw = "function() return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file') end";
+                };
+                cwd = "\${workspaceFolder}";
+                stopOnEntry = false;
+              }
+            ];
             c = cpp;
           };
-          extensions = { dap-ui.enable = true; };
+          extensions = {dap-ui.enable = true;};
         };
 
         none-ls = {
@@ -457,10 +458,10 @@
         smart-splits = {
           enable = true;
           settings = {
-            ignored_events = [ "BufEnter" "WinEnter" ];
+            ignored_events = ["BufEnter" "WinEnter"];
             resize_mode = {
               quit_key = "<ESC>";
-              resize_keys = [ "h" "j" "k" "l" ];
+              resize_keys = ["h" "j" "k" "l"];
               silent = true;
             };
           };
@@ -471,7 +472,7 @@
         undotree.enable = true;
         transparent = {
           enable = true;
-          settings.extra_groups = [ "Folded" "WhichKeyFloat" "NormalFloat" ];
+          settings.extra_groups = ["Folded" "WhichKeyFloat" "NormalFloat"];
         };
         friendly-snippets.enable = true;
         neoscroll.enable = true;
@@ -480,7 +481,7 @@
         marks.enable = true;
         codesnap = {
           enable = true;
-          settings = { watermark = "AlGhoul"; };
+          settings = {watermark = "AlGhoul";};
         };
       };
 
@@ -495,17 +496,18 @@
     lazygit = {
       enable = true;
       settings = {
-        gui.theme = { lightTheme = false; };
-        customCommands = [{
-          key = "C";
-          command = "git cz";
-          description = "commit with commitizen";
-          context = "files";
-          loadingText = "opening commitizen commit tool";
-          subprocess = true;
-        }];
+        gui.theme = {lightTheme = false;};
+        customCommands = [
+          {
+            key = "C";
+            command = "git cz";
+            description = "commit with commitizen";
+            context = "files";
+            loadingText = "opening commitizen commit tool";
+            subprocess = true;
+          }
+        ];
       };
     };
   };
-
 }
