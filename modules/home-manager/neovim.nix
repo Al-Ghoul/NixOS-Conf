@@ -259,12 +259,10 @@
         encoding = "UTF-8";
       };
 
-      clipboard = {
-        register = "unnamedplus";
-        providers.wl-copy.enable = true;
+      colorschemes.nightfox = {
+        enable = true;
+        flavor = "terafox";
       };
-
-      colorschemes.oxocarbon = { enable = true; };
 
       plugins = {
         startup = {
