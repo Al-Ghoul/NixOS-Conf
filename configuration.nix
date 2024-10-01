@@ -156,22 +156,20 @@
     libsForQt5.kdenlive
     (callPackage ./modules/nix-os/alghoul-sddm-theme.nix { })
     (easyeffects.overrideAttrs {
-      preFixup =
-        let
-          lv2Plugins = [
-            calf # compressor exciter, bass enhancer and others
-            zam-plugins # maximizer
-            lsp-plugins # delay, limiter, multiband compressor
-            mda_lv2 # loudness
-          ];
-          ladspaPlugins = [ deepfilternet ];
-        in
-        ''
-          gappsWrapperArgs+=(
-          --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
-          --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
-          )
-        '';
+      preFixup = let
+        lv2Plugins = [
+          calf # compressor exciter, bass enhancer and others
+          zam-plugins # maximizer
+          lsp-plugins # delay, limiter, multiband compressor
+          mda_lv2 # loudness
+        ];
+        ladspaPlugins = [ deepfilternet ];
+      in ''
+        gappsWrapperArgs+=(
+        --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+        --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+        )
+      '';
     })
     easyeffects
     sops
