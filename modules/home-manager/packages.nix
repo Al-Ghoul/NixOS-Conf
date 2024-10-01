@@ -43,6 +43,8 @@
 
     audacity
     pomodoro-gtk
+    tmux-sessionizer
+
   ];
 
 }
