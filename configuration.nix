@@ -82,6 +82,7 @@
     hostName = "AlGhoul";
     networkmanager.enable = true;
     firewall.checkReversePath = false;
+    interfaces."enp8s0".useDHCP = true;
   };
 
   # Set your time zone.
@@ -258,7 +259,24 @@
 
   virtualisation = {
     docker.enable = true;
-    libvirtd.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu = {
+        vhostUserPackages = [ pkgs.virtiofsd ];
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [
+            (pkgs.OVMF.override {
+              secureBoot = true;
+              tpmSupport = true;
+            }).fd
+          ];
+        };
+      };
+    };
   };
 
   sops = {
