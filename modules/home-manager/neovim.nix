@@ -1,26 +1,29 @@
-{ nixvim, pkgs, ... }: {
-
+{
+  pkgs,
+  ...
+}: {
   programs = {
     nixvim = {
       enable = true;
-      autoCmd = [{
-        event = [ "FileType" ];
-        pattern = [
-          "startup"
-          "dapui_watches"
-          "dap-repl"
-          "dapui_console"
-          "dapui_stacks"
-          "dapui_breakpoints"
-          "dapui_scopes"
-          "help"
-        ];
-        callback = {
-          __raw =
-            "function() require('ufo').detach() vim.opt_local.foldenable = false end";
-        };
-      }];
-      # NOTE: Remove dap's configurations if you're willing to remove plugins.dap 
+      autoCmd = [
+        {
+          event = ["FileType"];
+          pattern = [
+            "startup"
+            "dapui_watches"
+            "dap-repl"
+            "dapui_console"
+            "dapui_stacks"
+            "dapui_breakpoints"
+            "dapui_scopes"
+            "help"
+          ];
+          callback = {
+            __raw = "function() require('ufo').detach() vim.opt_local.foldenable = false end";
+          };
+        }
+      ];
+      # NOTE: Remove dap's configurations if you're willing to remove plugins.dap
       extraConfigLua = ''
         local dap = require("dap")
         local dapui = require("dapui")
@@ -36,7 +39,7 @@
         dap.listeners.before.event_exited.dapui_config = function()
           dapui.close()
         end
-          
+
         vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
         vim.keymap.set('n', '<S-F5>', function() require('dap').terminate() end)
         vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
@@ -79,7 +82,7 @@
           vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {})
 
       '';
-      globals = { mapleader = ","; };
+      globals = {mapleader = ",";};
       keymaps = [
         {
           action = ":LazyGit<CR>";
@@ -259,30 +262,24 @@
         encoding = "UTF-8";
       };
 
-      clipboard = {
-        register = "unnamedplus";
-        providers.wl-copy.enable = true;
-      };
-
       colorschemes.nightfox = {
         enable = true;
-        flavor = "carbonfox";
+        flavor = "terafox";
       };
 
       plugins = {
         startup = {
           enable = true;
-          # theme = null;
-          parts = [ "header" "body" ];
+          parts = ["header" "body"];
           sections = {
             body = {
               align = "center";
               content = [
-                [ " Find File" "FzfLua files" "<leader>ff" ]
-                [ "󰍉 Find Word" "FzfLua live_grep" "<leader>fg" ]
-                [ " Recent Files" "FzfLua oldfiles" "<leader>of" ]
-                [ " Colorschemes" "FzfLua colorschemes" "<leader>cs" ]
-                [ " New File" "lua require'startup'.new_file()" "<leader>nf" ]
+                [" Find File" "FzfLua files" "<leader>ff"]
+                [" Find Word" "FzfLua live_grep" "<leader>fg"]
+                [" Recent Files" "FzfLua oldfiles" "<leader>of"]
+                [" Colorschemes" "FzfLua colorschemes" "<leader>cs"]
+                [" New File" "lua require'startup'.new_file()" "<leader>nf"]
               ];
               defaultColor = "";
               foldSection = false;
@@ -294,7 +291,7 @@
             };
             header = {
               align = "center";
-              content = { __raw = "require('startup.headers').hydra_header"; };
+              content = {__raw = "require('startup.headers').hydra_header";};
               defaultColor = "#741616";
               foldSection = false;
               highlight = "Statement";
@@ -343,24 +340,11 @@
         fidget.enable = true;
         illuminate.enable = true;
         nvim-ufo.enable = true;
-        diffview.enable = true;
         nvim-colorizer.enable = true;
         emmet.enable = true;
         hmts.enable = true;
         plantuml-syntax.enable = true;
-        quickmath.enable = true;
-        spider = {
-          enable = false;
-          keymaps = {
-            motions = {
-              b = "b";
-              e = "e";
-              ge = "ge";
-              w = "w";
-            };
-          };
-        };
-        surround.enable = true;
+        vim-surround.enable = true;
         todo-comments.enable = true;
         treesitter = {
           enable = true;
@@ -372,16 +356,13 @@
         vim-matchup.enable = true;
         wilder = {
           enable = true;
-          modes = [ "/" "?" ":" ];
+          modes = ["/" "?" ":"];
         };
 
-        presence-nvim = {
-          enable = true;
-          showTime = false;
-          mainImage = "file";
-        };
+        neocord.enable = true;
 
         lspsaga.enable = true;
+        web-devicons.enable = true;
 
         lsp = {
           enable = true;
@@ -390,15 +371,21 @@
             tailwindcss.enable = true;
             clangd = {
               enable = true;
-              cmd = [ "clangd" "--offset-encoding=utf-16" ];
+              cmd = ["clangd" "--offset-encoding=utf-16"];
             };
             cmake.enable = true;
             prismals.enable = true;
             jsonls.enable = true;
             pyright.enable = true;
-            tsserver.enable = true;
+            ts-ls.enable = true;
             astro.enable = true;
             html.enable = true;
+            cssls.enable = true;
+            marksman.enable = true;
+            nginx-language-server.enable = true;
+            sqls.enable = true;
+            intelephense.enable = true;
+            zls.enable = true;
           };
         };
         lint.enable = true;
@@ -407,18 +394,18 @@
 
         luasnip = {
           enable = true;
-          fromVscode = [{ }];
+          fromVscode = [{}];
         };
+
         cmp = {
           enable = true;
           settings = {
-            snippet.expand =
-              "function(args) require('luasnip').lsp_expand(args.body) end";
+            snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
             sources = [
-              { name = "nvim_lsp"; }
-              { name = "luasnip"; }
-              { name = "path"; }
-              { name = "buffer"; }
+              {name = "nvim_lsp";}
+              {name = "luasnip";}
+              {name = "path";}
+              {name = "buffer";}
             ];
             mapping = {
               "<C-Space>" = "cmp.mapping.complete()";
@@ -426,47 +413,44 @@
               "<C-e>" = "cmp.mapping.close()";
               "<C-f>" = "cmp.mapping.scroll_docs(4)";
               "<CR>" = "cmp.mapping.confirm({ select = true })";
-              "<S-Tab>" =
-                "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
-              "<Tab>" =
-                "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+              "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+              "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
             };
           };
         };
         dap = {
           enable = true;
           adapters = {
-            executables = { lldb = { command = "lldb-vscode"; }; };
+            executables = {lldb = {command = "lldb-vscode";};};
           };
           configurations = rec {
-            cpp = [{
-              name = "C, C++ & Rust Debugger configurations";
-              type = "lldb";
-              request = "launch";
-              program = {
-                __raw =
-                  "function() return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file') end";
-              };
-              cwd = "\${workspaceFolder}";
-              stopOnEntry = false;
-            }];
+            cpp = [
+              {
+                name = "C, C++ & Rust Debugger configurations";
+                type = "lldb";
+                request = "launch";
+                program = {
+                  __raw = "function() return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file') end";
+                };
+                cwd = "\${workspaceFolder}";
+                stopOnEntry = false;
+              }
+            ];
             c = cpp;
           };
-          extensions = { dap-ui.enable = true; };
+          extensions = {dap-ui.enable = true;};
         };
 
         none-ls = {
           enable = true;
           sources = {
-            diagnostics = {
-              deadnix.enable = true;
-              statix.enable = true;
-              markdownlint.enable = true;
-            };
             formatting = {
               black.enable = true;
-              nixfmt.enable = true;
-              markdownlint.enable = true;
+              alejandra.enable = true;
+              mdformat.enable = true;
+              htmlbeautifier.enable = true;
+              phpcsfixer.enable = true;
+              prettierd.enable = true;
             };
           };
         };
@@ -474,27 +458,58 @@
         smart-splits = {
           enable = true;
           settings = {
-            ignored_events = [ "BufEnter" "WinEnter" ];
+            ignored_events = ["BufEnter" "WinEnter"];
             resize_mode = {
               quit_key = "<ESC>";
-              resize_keys = [ "h" "j" "k" "l" ];
+              resize_keys = ["h" "j" "k" "l"];
               silent = true;
             };
           };
         };
 
-        codeium-vim.enable = true;
+        codeium-vim = let
+          codeiumPkg = pkgs.codeium.overrideAttrs (prevAttrs: rec {
+            version = "1.8.59";
+            plat = "linux_x64";
+            src = pkgs.fetchurl {
+              name = "${prevAttrs.pname}-${version}.gz";
+              url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${version}/language_server_${plat}.gz";
+              hash = "sha256-j+5ckDfn87vvaGk+c+yHfF/F5KLLOLirPaR582kUD5U=";
+            };
+          });
+        in {
+          enable = true;
+          package = pkgs.vimPlugins.codeium-vim.overrideAttrs (finalAttr: p: {
+            version = "git";
+            src = pkgs.fetchFromGitHub {
+              owner = "Exafunction";
+              repo = "codeium.vim";
+              rev = "5644ac5a0e098ca0cf5deed1c909c3fa5e9901f3";
+              sha256 = "sha256-7XElW/54T6VlUJwvXFr4PumrX96jyzZi5XqA9n7hLJA=";
+            };
+          });
+          settings = {
+            bin = "${codeiumPkg}/bin/codeium_language_server";
+          };
+        };
 
         undotree.enable = true;
         transparent = {
           enable = true;
-          settings.extra_groups = [ "Folded" "WhichKeyFloat" "NormalFloat" ];
+          settings.extra_groups = ["Folded" "WhichKeyFloat" "NormalFloat"];
         };
         friendly-snippets.enable = true;
+        neoscroll.enable = true;
+        lazygit.enable = true;
+        mark-radar.enable = true;
+        marks.enable = true;
+        codesnap = {
+          enable = true;
+          settings = {watermark = "AlGhoul";};
+        };
       };
 
       extraPlugins = with pkgs.vimPlugins; [
-        lazygit-nvim
         vim-highlightedyank
         vim-visual-multi
         vim-airline-themes
@@ -505,17 +520,18 @@
     lazygit = {
       enable = true;
       settings = {
-        gui.theme = { lightTheme = false; };
-        customCommands = [{
-          key = "C";
-          command = "git cz";
-          description = "commit with commitizen";
-          context = "files";
-          loadingText = "opening commitizen commit tool";
-          subprocess = true;
-        }];
+        gui.theme = {lightTheme = false;};
+        customCommands = [
+          {
+            key = "C";
+            command = "git cz";
+            description = "commit with commitizen";
+            context = "files";
+            loadingText = "opening commitizen commit tool";
+            subprocess = true;
+          }
+        ];
       };
     };
   };
-
 }

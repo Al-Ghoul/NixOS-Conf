@@ -1,5 +1,4 @@
-{ pkgs, ...}:
-{
+{ pkgs, ... }: {
   gtk = {
     enable = true;
     theme = {
@@ -9,6 +8,10 @@
     iconTheme = {
       name = "Flat-Remix-Red-Dark";
       package = pkgs.flat-remix-icon-theme;
+    };
+    cursorTheme = {
+      name = "Vimix-cursors";
+      package = pkgs.vimix-cursors;
     };
   };
 }

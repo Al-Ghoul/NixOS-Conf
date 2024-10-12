@@ -11,6 +11,7 @@
         exec-once = mako # Notifications 
         exec-once = waybar # Staus bar 
         exec-once = wl-paste --watch cliphist store # Clipboard
+        exec-once = hyprctl setcursor Vimix-cursors 32 # Cursor
 
         input {
           kb_layout = us, ara
@@ -30,10 +31,10 @@
         }
 
       general {
-        gaps_in = 5
-        gaps_out = 5
+        gaps_in = 3
+        gaps_out = 3
         border_size = 2
-        col.active_border = rgba(13ACACee) rgba(16A0F3ee) 90deg
+        col.active_border = rgba(AC1313ee) rgba(000000ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -58,7 +59,6 @@
 
 
         blurls = lockscreen
-
 
           drop_shadow = false
           shadow_range = 10
@@ -89,9 +89,6 @@
         special_scale_factor = 1 # Enables mainMod + P to put the screen on special work space on full
       }
 
-      master {
-        new_is_master = true
-      }
 
       gestures {
         workspace_swipe = off
@@ -358,7 +355,7 @@
       * {
         font-family: "JetBrainsMono Nerd Font";
       }
-      
+
       window#waybar {
         background: rgba(0, 0, 0, 0);
         font-size: 0.8rem;
@@ -371,17 +368,14 @@
 
       .modules-left,
       .modules-center {
-        background: linear-gradient(45deg, rgba(8, 84, 203, 1), rgba(8, 147, 203, 1));
+        background: radial-gradient(circle, rgba(180,9,9,1) 0%, rgba(19,25,32,1) 100%);
         border-radius: 0.5rem;
         padding: 2px;
       }
 
       .modules-right {
-        background-color: rgba(18,18,18,0.7);
+        background: radial-gradient(circle, rgba(180,9,9,1) 0%, rgba(19,25,32,1) 90%);
         border-radius: 0.5rem;
-        border-width: 1px;
-        border-style: solid;
-        border-color: #1A5ECA;
         padding: 2px 2px 2px 10px;
       }
 
@@ -406,7 +400,7 @@
        }
 
        #workspaces button.active {
-         color: #1A5ECA;
+         color: #CA1A1A;
        }
 
        #workspaces button.urgent {

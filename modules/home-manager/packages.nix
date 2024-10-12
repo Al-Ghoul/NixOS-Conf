@@ -42,6 +42,12 @@
     vesktop
 
     audacity
+    pomodoro-gtk
+    tmux-sessionizer
+
+    tree
+
+    anydesk
   ];
 
 }
