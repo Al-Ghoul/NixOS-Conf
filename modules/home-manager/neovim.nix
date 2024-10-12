@@ -384,7 +384,7 @@
             marksman.enable = true;
             nginx-language-server.enable = true;
             sqls.enable = true;
-            phpactor.enable = true;
+            intelephense.enable = true;
             zls.enable = true;
           };
         };
