@@ -45,6 +45,9 @@
     pomodoro-gtk
     tmux-sessionizer
 
+    tree
+
+    anydesk
   ];
 
 }
