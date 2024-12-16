@@ -34,7 +34,7 @@
         gaps_in = 3
         gaps_out = 3
         border_size = 2
-        col.active_border = rgba(AC1313ee) rgba(000000ee) 90deg
+        col.active_border = rgba(d9d31bee) rgba(000000ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -59,12 +59,6 @@
 
 
         blurls = lockscreen
-
-          drop_shadow = false
-          shadow_range = 10
-          shadow_render_power = 4
-          col.shadow = rgba(1a1a1aee)
-          col.shadow_inactive=0x50000000
       }
 
       animations {
@@ -85,7 +79,6 @@
       dwindle {
         pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
         preserve_split = yes # you probably want this
-        no_gaps_when_only = -2
         special_scale_factor = 1 # Enables mainMod + P to put the screen on special work space on full
       }
 
@@ -368,13 +361,13 @@
 
       .modules-left,
       .modules-center {
-        background: radial-gradient(circle, rgba(180,9,9,1) 0%, rgba(19,25,32,1) 100%);
+        background: radial-gradient(circle, rgba(217,211,27,1) 0%, rgba(19,25,32,1) 100%);
         border-radius: 0.5rem;
         padding: 2px;
       }
 
       .modules-right {
-        background: radial-gradient(circle, rgba(180,9,9,1) 0%, rgba(19,25,32,1) 90%);
+        background: radial-gradient(circle, rgba(217,211,27,1) 0%, rgba(19,25,32,1) 90%);
         border-radius: 0.5rem;
         padding: 2px 2px 2px 10px;
       }
@@ -400,7 +393,7 @@
        }
 
        #workspaces button.active {
-         color: #CA1A1A;
+         color: #d9d31b;
        }
 
        #workspaces button.urgent {
