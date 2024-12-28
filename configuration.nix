@@ -1,8 +1,6 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ config, lib, pkgs, inputs, ... }:
-
-{
+{ config, lib, pkgs, inputs, ... }: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -30,7 +28,6 @@
         "github:nix-systems/"
       ];
     };
-    package = pkgs.nixVersions.nix_2_21;
     extraOptions = ''
       !include ${config.sops.templates."nix-extra-config".path}
     '';
@@ -38,13 +35,14 @@
     registry.nixpkgs.flake = inputs.nixpkgs;
   };
 
-  fonts.packages =
-    [ (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
+  fonts.packages = [
+    pkgs.nerd-fonts.jetbrains-mono
+  ];
 
   hardware = {
     graphics = {
       enable = true;
-      extraPackages = with pkgs; [ amdvlk mesa ];
+      extraPackages = with pkgs; [ amdvlk mesa rocmPackages.clr.icd ];
       extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
     };
   };
@@ -151,6 +149,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    clinfo
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     libsForQt5.qt5.qtgraphicaleffects
