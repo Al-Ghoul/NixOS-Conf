@@ -34,7 +34,7 @@
         gaps_in = 3
         gaps_out = 3
         border_size = 2
-        col.active_border = rgba(d9d31bee) rgba(000000ee) 90deg
+        col.active_border = rgba(807d16ee) rgba(000000ee) 90deg
         col.inactive_border = rgba(595959aa)
 
         layout = dwindle
@@ -361,13 +361,13 @@
 
       .modules-left,
       .modules-center {
-        background: radial-gradient(circle, rgba(217,211,27,1) 0%, rgba(19,25,32,1) 100%);
+        background: radial-gradient(circle, rgba(128,125,22,1) 0%, rgba(19,25,32,1) 100%);
         border-radius: 0.5rem;
         padding: 2px;
       }
 
       .modules-right {
-        background: radial-gradient(circle, rgba(217,211,27,1) 0%, rgba(19,25,32,1) 90%);
+        background: radial-gradient(circle, rgba(128,125,22,1) 0%, rgba(19,25,32,1) 90%);
         border-radius: 0.5rem;
         padding: 2px 2px 2px 10px;
       }
@@ -393,7 +393,7 @@
        }
 
        #workspaces button.active {
-         color: #d9d31b;
+         color: #807d16;
        }
 
        #workspaces button.urgent {
