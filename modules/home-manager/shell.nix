@@ -22,7 +22,7 @@
     kitty = {
       enable = true;
       font = {
-        package = pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; };
+        package = pkgs.nerd-fonts.jetbrains-mono;
         name = "jetbrains mono nerd font";
       };
       settings = {
@@ -32,7 +32,7 @@
         active_border_color = "#16caf3";
         enabled_layouts = "vertical,horizontal";
       };
-      theme = "Pnevma";
+      themeFile = "Pnevma";
       keybindings = {
         "ctrl+right" = "resize_window narrower";
         "ctrl+left" = "resize_window wider";
@@ -70,7 +70,7 @@
         }
 
         {
-          plugin = mkTmuxPlugin rec {
+          plugin = mkTmuxPlugin {
             pluginName = "tmux-pomodoro-plus";
             version = "1.0.2";
             src = pkgs.fetchFromGitHub {
