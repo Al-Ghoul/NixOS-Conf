@@ -42,8 +42,26 @@
     vesktop
 
     audacity
+
+    telegram-desktop
+
+    krita
+
+    ardour
+    talentedhack
+    autotalent
+    noise-repellent
+    x42-plugins
+
+    timidity
+
     pomodoro-gtk
+
+    ghidra
+
     tmux-sessionizer
+
+    remmina
 
     tree
 
