@@ -1,89 +1,39 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs = {
     nixvim = {
       enable = true;
-      autoCmd = [
-        {
-          event = ["FileType"];
-          pattern = [
-            "startup"
-            "dapui_watches"
-            "dap-repl"
-            "dapui_console"
-            "dapui_stacks"
-            "dapui_breakpoints"
-            "dapui_scopes"
-            "help"
-          ];
-          callback = {
-            __raw = "function() require('ufo').detach() vim.opt_local.foldenable = false end";
-          };
-        }
-      ];
-      # NOTE: Remove dap's configurations if you're willing to remove plugins.dap
+      performance = {
+        byteCompileLua.enable = true;
+        byteCompileLua.nvimRuntime = true;
+        byteCompileLua.plugins = true;
+      };
       extraConfigLua = ''
-        local dap = require("dap")
-        local dapui = require("dapui")
-        dap.listeners.before.attach.dapui_config = function()
-          dapui.open()
-        end
-        dap.listeners.before.launch.dapui_config = function()
-          dapui.open()
-        end
-        dap.listeners.before.event_terminated.dapui_config = function()
-          dapui.close()
-        end
-        dap.listeners.before.event_exited.dapui_config = function()
-          dapui.close()
-        end
+        -- resizing splits
+         vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+         vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+         vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+         vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+         -- moving between splits
+         vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+         vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+         vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+         vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
 
-        vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
-        vim.keymap.set('n', '<S-F5>', function() require('dap').terminate() end)
-        vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
-        vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
-        vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
-        vim.keymap.set('n', '<Leader>dr', function() require('dap').restart() end)
-
-        vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end)
-        vim.keymap.set('n', '<Leader>dB', function() require('dap').set_breakpoint() end)
-
-        vim.keymap.set('n', '<Leader>dor', function() require('dap').repl.open() end)
-        vim.keymap.set('n', '<Leader>drl', function() require('dap').run_last() end)
-
-        vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
-        require('dap.ui.widgets').hover()
-        end)
-        vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
-          require('dap.ui.widgets').preview()
-        end)
-        vim.keymap.set('n', '<Leader>df', function()
-          local widgets = require('dap.ui.widgets')
-          widgets.centered_float(widgets.frames)
-        end)
-        vim.keymap.set('n', '<Leader>ds', function()
-          local widgets = require('dap.ui.widgets')
-          widgets.centered_float(widgets.scopes)
-          end)
-
-          -- resizing splits
-          vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
-          vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
-          vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
-          vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
-          -- moving between splits
-          vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
-          vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
-          vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
-          vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
-
-          vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {})
+         vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {})
 
       '';
       globals = {mapleader = ",";};
       keymaps = [
+        {
+          action = ":Navbuddy<CR>";
+          key = "<leader>b";
+          mode = "n";
+          options = {
+            silent = true;
+            desc = "Open up navbuddy";
+          };
+        }
+
         {
           action = ":LazyGit<CR>";
           key = "<leader>lg";
@@ -246,7 +196,7 @@
         signcolumn = "yes";
         cmdheight = 1;
         scrolloff = 10;
-        completeopt = "menu,menuone,noselect";
+        completeopt = "menu,preview,menuone,noselect";
 
         # Behavior
         hidden = true;
@@ -262,10 +212,7 @@
         encoding = "UTF-8";
       };
 
-      colorschemes.nightfox = {
-        enable = true;
-        flavor = "terafox";
-      };
+      colorschemes.melange.enable = true;
 
       plugins = {
         startup = {
@@ -339,10 +286,8 @@
         noice.enable = true;
         fidget.enable = true;
         illuminate.enable = true;
-        nvim-ufo.enable = true;
-        nvim-colorizer.enable = true;
+        colorizer.enable = true;
         emmet.enable = true;
-        hmts.enable = true;
         plantuml-syntax.enable = true;
         vim-surround.enable = true;
         todo-comments.enable = true;
@@ -351,9 +296,7 @@
           nixvimInjections = true;
           folding = true;
         };
-        treesitter-context.enable = true;
         rainbow-delimiters.enable = true;
-        vim-matchup.enable = true;
         wilder = {
           enable = true;
           modes = ["/" "?" ":"];
@@ -374,24 +317,50 @@
               cmd = ["clangd" "--offset-encoding=utf-16"];
             };
             cmake.enable = true;
-            prismals.enable = true;
+            # prismals.enable = true;
+            # intelephense.enable = true;
             jsonls.enable = true;
             pyright.enable = true;
-            ts-ls.enable = true;
+            ts_ls.enable = true;
             astro.enable = true;
             html.enable = true;
             cssls.enable = true;
             marksman.enable = true;
-            nginx-language-server.enable = true;
+            nginx_language_server.enable = true;
             sqls.enable = true;
-            intelephense.enable = true;
             zls.enable = true;
+            svelte.enable = true;
           };
         };
         lint.enable = true;
 
+        none-ls = {
+          enable = true;
+          sources = {
+            code_actions = {
+              statix.enable = true;
+            };
+            diagnostics = {
+              deadnix.enable = true;
+              statix.enable = true;
+            };
+            completion = {
+              luasnip.enable = true;
+            };
+            formatting = {
+              black.enable = true;
+              alejandra.enable = true;
+              prettier = {
+                enable = true;
+                disableTsServerFormatter = true;
+              };
+            };
+          };
+        };
+
         ts-autotag.enable = true;
 
+        friendly-snippets.enable = true;
         luasnip = {
           enable = true;
           fromVscode = [{}];
@@ -402,8 +371,8 @@
           settings = {
             snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
             sources = [
-              {name = "nvim_lsp";}
               {name = "luasnip";}
+              {name = "nvim_lsp";}
               {name = "path";}
               {name = "buffer";}
             ];
@@ -412,45 +381,9 @@
               "<C-d>" = "cmp.mapping.scroll_docs(-4)";
               "<C-e>" = "cmp.mapping.close()";
               "<C-f>" = "cmp.mapping.scroll_docs(4)";
-              "<CR>" = "cmp.mapping.confirm({ select = true })";
+              "<CR>" = "cmp.mapping.confirm({ select = false })";
               "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
               "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-            };
-          };
-        };
-        dap = {
-          enable = true;
-          adapters = {
-            executables = {lldb = {command = "lldb-vscode";};};
-          };
-          configurations = rec {
-            cpp = [
-              {
-                name = "C, C++ & Rust Debugger configurations";
-                type = "lldb";
-                request = "launch";
-                program = {
-                  __raw = "function() return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file') end";
-                };
-                cwd = "\${workspaceFolder}";
-                stopOnEntry = false;
-              }
-            ];
-            c = cpp;
-          };
-          extensions = {dap-ui.enable = true;};
-        };
-
-        none-ls = {
-          enable = true;
-          sources = {
-            formatting = {
-              black.enable = true;
-              alejandra.enable = true;
-              mdformat.enable = true;
-              htmlbeautifier.enable = true;
-              phpcsfixer.enable = true;
-              prettierd.enable = true;
             };
           };
         };
@@ -488,9 +421,7 @@
               sha256 = "sha256-7XElW/54T6VlUJwvXFr4PumrX96jyzZi5XqA9n7hLJA=";
             };
           });
-          settings = {
-            bin = "${codeiumPkg}/bin/codeium_language_server";
-          };
+          settings = {bin = "${codeiumPkg}/bin/codeium_language_server";};
         };
 
         undotree.enable = true;
@@ -498,7 +429,6 @@
           enable = true;
           settings.extra_groups = ["Folded" "WhichKeyFloat" "NormalFloat"];
         };
-        friendly-snippets.enable = true;
         neoscroll.enable = true;
         lazygit.enable = true;
         mark-radar.enable = true;
@@ -507,11 +437,19 @@
           enable = true;
           settings = {watermark = "AlGhoul";};
         };
-      };
 
+        flash.enable = true;
+        guess-indent.enable = true;
+        hop.enable = true;
+        kulala.enable = true;
+        cloak.enable = true;
+        yanky.enable = true;
+        wtf.enable = true;
+        comment-box.enable = true;
+      };
+      #
       extraPlugins = with pkgs.vimPlugins; [
         vim-highlightedyank
-        vim-visual-multi
         vim-airline-themes
       ];
     };
